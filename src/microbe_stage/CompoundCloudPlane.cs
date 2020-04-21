@@ -423,8 +423,8 @@ public class CompoundCloudPlane : CSGMesh
             {
                 for (int y = 1; y < size - 1; y++)
                 {
-                    oldDens[x, y] = (density[x, y] * (1 - a)) + ((oldDens[x - 1, y] +
-                        oldDens[x + 1, y] + oldDens[x, y - 1] + oldDens[x, y + 1]) * a / 4);
+                    oldDens[x, y] = (density[x, y] * (1 - a)) + ((density[x - 1, y] +
+                        density[x + 1, y] + density[x, y - 1] + density[x, y + 1]) * a / 4);
                 }
             }
         }
