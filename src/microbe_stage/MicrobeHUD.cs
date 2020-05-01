@@ -56,7 +56,6 @@ public class MicrobeHUD : Node
     private List<TextureRect> compoundIconArray;
     private PanelContainer panelExpand;
     private PanelContainer panelCompress;
-
     private Control menu;
     private TextureButton pauseButton;
     private TextureButton resumeButton;
