@@ -74,6 +74,7 @@ public class MicrobeStage : Node
         FluidSystem = new FluidSystem(rootOfDynamicallySpawned);
 
         HUD.Init(this);
+
         // Do stage setup to spawn things and setup all parts of the stage
         SetupStage();
         GenerateCompoundsArray();
@@ -281,12 +282,12 @@ public class MicrobeStage : Node
     public void GenerateCompoundsArray()
     {
         CompoundArray = new List<Compound>();
-        foreach(ProgressBar bar in HUD.barPanels.GetChildren())
+        foreach (ProgressBar bar in HUD.BarPanels.GetChildren())
         {
             string text = bar.GetNode<Label>("Label").Text;
             Compound compound;
 
-            switch(text)
+            switch (text)
             {
                 case "Glucose":
                     compound = SimulationParameters.Instance.GetCompound("glucose");
@@ -306,7 +307,8 @@ public class MicrobeStage : Node
                 default:
                     throw new NotImplementedException("Compound not implemented");
             }
-                CompoundArray.Add(compound);
+
+            CompoundArray.Add(compound);
         }
     }
 
