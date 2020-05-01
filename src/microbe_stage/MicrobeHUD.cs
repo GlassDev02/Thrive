@@ -54,8 +54,6 @@ public class MicrobeHUD : Node
     private VBoxContainer leftPanels;
     private List<ProgressBar> compoundBarArray;
     private List<TextureRect> compoundIconArray;
-    private PanelContainer panelExpand;
-    private PanelContainer panelCompress;
     private Control menu;
     private TextureButton pauseButton;
     private TextureButton resumeButton;
