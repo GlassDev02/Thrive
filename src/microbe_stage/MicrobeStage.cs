@@ -279,7 +279,7 @@ public class MicrobeStage : Node
     public void GenerateCompoundsArray()
     {
         CompoundArray = new List<Compound>();
-        foreach (HBoxContainer bar in HUD.compoundsPanelBarContainer.GetChildren())
+        foreach (HBoxContainer bar in HUD.CompoundsPanelBarContainer.GetChildren())
         {
             Compound compound;
 

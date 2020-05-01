@@ -71,7 +71,7 @@ public class MicrobeHUD : Node
     [Export]
     public Texture PhosphatesInv;
 
-    public GridContainer compoundsPanelBarContainer;
+    public GridContainer CompoundsPanelBarContainer;
     private AnimationPlayer animationPlayer;
     private PanelContainer mouseHoverPanel;
     private VBoxContainer hoveredItems;
@@ -85,7 +85,6 @@ public class MicrobeHUD : Node
     private ProgressBar ironBar;
     private Control agentsPanel;
     private ProgressBar oxytoxyBar;
-    private GridContainer agentsPanelBarContainer;
     private VBoxContainer leftPanels;
     private Control menu;
     private TextureButton pauseButton;
@@ -144,7 +143,7 @@ public class MicrobeHUD : Node
         hydrogenSulfideBar = GetNode<ProgressBar>(HydrogenSulfideBarPath);
         ironBar = GetNode<ProgressBar>(IronBarPath);
         compoundsPanel = GetNode<NinePatchRect>(CompoundsPanelPath);
-        compoundsPanelBarContainer = GetNode<GridContainer>(CompoundsPanelBarContainerPath);
+        CompoundsPanelBarContainer = GetNode<GridContainer>(CompoundsPanelBarContainerPath);
         oxytoxyBar = GetNode<ProgressBar>(OxytoxyBarPath);
         atpLabel = GetNode<Label>(AtpLabelPath);
         hpLabel = GetNode<Label>(HpLabelPath);
@@ -248,7 +247,7 @@ public class MicrobeHUD : Node
 
     public void ResizeCompoundPanel(string mode)
     {
-        var bars = compoundsPanelBarContainer.GetChildren();
+        var bars = CompoundsPanelBarContainer.GetChildren();
 
         if (mode == "compress" && !compundCompressed)
         {
@@ -259,11 +258,11 @@ public class MicrobeHUD : Node
 
             if (bars.Count < 4)
             {
-                compoundsPanelBarContainer.Columns = 2;
+                CompoundsPanelBarContainer.Columns = 2;
             }
             else
             {
-                compoundsPanelBarContainer.Columns = 3;
+                CompoundsPanelBarContainer.Columns = 3;
             }
 
             foreach (Node bar in bars)
@@ -282,7 +281,7 @@ public class MicrobeHUD : Node
 
             GUICommon.Instance.TweenUIProperty(compoundsPanel, "rect_min_size", compoundsPanel.RectMinSize,
                 new Vector2(253, 239), 0.3f);
-            compoundsPanelBarContainer.Columns = 1;
+            CompoundsPanelBarContainer.Columns = 1;
 
             foreach (Node bar in bars)
             {
@@ -408,12 +407,12 @@ public class MicrobeHUD : Node
             if (compounds.IsUseful(stage.CompoundArray[i]))
             {
                 if (compoundBarArray[i].GetParent() == null)
-                    compoundsPanelBarContainer.AddChild(compoundBarArray[i]);
+                    CompoundsPanelBarContainer.AddChild(compoundBarArray[i]);
             }
             else
             {
                 if (compoundBarArray[i].GetParent() != null)
-                    compoundsPanelBarContainer.RemoveChild(compoundBarArray[i]);
+                    CompoundsPanelBarContainer.RemoveChild(compoundBarArray[i]);
             }
         }
     }
@@ -424,7 +423,7 @@ public class MicrobeHUD : Node
     /// </summary>
     private void StoreCompoundBar()
     {
-        foreach (HBoxContainer bar in compoundsPanelBarContainer.GetChildren())
+        foreach (HBoxContainer bar in CompoundsPanelBarContainer.GetChildren())
         {
             compoundBarArray.Add(bar);
         }
@@ -711,7 +710,7 @@ public class MicrobeHUD : Node
                 -300, compoundsPanel.RectPosition.y), 0.3f, Tween.TransitionType.Linear, Tween.EaseType.Out, 0.05f);
             guiCommon.TweenUIProperty(agentsPanel, "rect_position", agentsPanel.RectPosition, new Vector2(
                 -300, agentsPanel.RectPosition.y), 0.3f, Tween.TransitionType.Linear, Tween.EaseType.Out);
-        
+
             guiCommon.TweenUIProperty(leftPanels, "modulate", leftPanels.Modulate, new Color(1, 1, 1, 0), 0.3f);
         }
         else
@@ -724,7 +723,7 @@ public class MicrobeHUD : Node
                 0, compoundsPanel.RectPosition.y), 0.4f, Tween.TransitionType.Linear, Tween.EaseType.In, 0.05f);
             guiCommon.TweenUIProperty(agentsPanel, "rect_position", agentsPanel.RectPosition, new Vector2(
                 0, agentsPanel.RectPosition.y), 0.4f, Tween.TransitionType.Linear, Tween.EaseType.In);
-        
+
             guiCommon.TweenUIProperty(leftPanels, "modulate", new Color(1, 1, 1, 0), new Color(1, 1, 1, 1), 0.3f);
         }
     }
