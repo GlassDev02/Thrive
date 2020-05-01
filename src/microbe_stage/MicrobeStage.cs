@@ -113,12 +113,11 @@ public class MicrobeStage : Node
         CreatePatchManagerIfNeeded();
 
         patchManager.ApplyChangedPatchSettingsIfNeeded(GameWorld.Map.CurrentPatch);
+        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
         UpdateBackground();
 
         SpawnPlayer();
         Camera.ResetHeight();
-
-        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
     }
 
     public void StartMusic()
@@ -190,7 +189,6 @@ public class MicrobeStage : Node
         if (gameOver)
         {
             // Player is extinct and has lost the game
-
             // Show the game lost popup if not already visible
             HUD.ShowExtinctionBox();
 
@@ -253,6 +251,9 @@ public class MicrobeStage : Node
 
         // Now the editor increases the generation so we don't do that here anymore
 
+        // Make sure player is spawned
+        SpawnPlayer();
+
         // Check win conditions
         if (!CurrentGame.FreeBuild && Player.Species.Generation >= 20 &&
             Player.Species.Population >= 300 && !wonOnce)
@@ -260,9 +261,6 @@ public class MicrobeStage : Node
             HUD.ToggleWinBox();
             wonOnce = true;
         }
-
-        // Make sure player is spawned
-        SpawnPlayer();
 
         // Update the player's cell
         Player.ApplySpecies(Player.Species);
@@ -274,7 +272,6 @@ public class MicrobeStage : Node
 
         HUD.OnEnterStageTransition();
         HUD.HideReproductionDialog();
-        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
 
         StartMusic();
     }

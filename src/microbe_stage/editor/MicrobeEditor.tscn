@@ -1,8 +1,8 @@
-[gd_scene load_steps=144 format=2]
+[gd_scene load_steps=146 format=2]
 
 [ext_resource path="res://src/microbe_stage/MicrobeCamera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/microbe_stage/editor/MicrobeEditor.cs" type="Script" id=2]
-[ext_resource path="res://src/microbe_stage/editor/EditorHex.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/textures/gui/bevel/decrease.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/gui/bevel/EditPanelMid.png" type="Texture" id=4]
 [ext_resource path="res://assets/fonts/Jura-DemiBold.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/textures/gui/bevel/OrganelleDisabled.png" type="Texture" id=6]
@@ -77,6 +77,7 @@
 [ext_resource path="res://assets/textures/gui/bevel/6xSymmetry.png" type="Texture" id=75]
 [ext_resource path="res://assets/textures/gui/bevel/4xSymmetry.png" type="Texture" id=76]
 [ext_resource path="res://assets/textures/gui/bevel/2xSymmetry.png" type="Texture" id=77]
+[ext_resource path="res://assets/textures/gui/bevel/increase.png" type="Texture" id=78]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 37 )
@@ -118,7 +119,7 @@ border_width_bottom = 3
 border_color = Color( 0.439216, 0.623529, 0.623529, 0.392157 )
 
 [sub_resource type="DynamicFont" id=9]
-size = 14
+size = 15
 font_data = ExtResource( 5 )
 
 [sub_resource type="StyleBoxEmpty" id=10]
@@ -1182,22 +1183,19 @@ default_font = SubResource( 58 )
 [sub_resource type="StyleBoxFlat" id=60]
 border_width_top = 1
 
-[sub_resource type="DynamicFont" id=61]
+[sub_resource type="StyleBoxEmpty" id=61]
+
+[sub_resource type="DynamicFont" id=62]
 size = 30
 use_filter = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=62]
-use_filter = true
-font_data = ExtResource( 5 )
-
 [sub_resource type="DynamicFont" id=63]
-size = 20
 use_filter = true
 font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=64]
-size = 18
+size = 20
 use_filter = true
 font_data = ExtResource( 5 )
 
@@ -1206,8 +1204,13 @@ size = 18
 use_filter = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="Theme" id=66]
-default_font = SubResource( 65 )
+[sub_resource type="DynamicFont" id=66]
+size = 18
+use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="Theme" id=67]
+default_font = SubResource( 66 )
 
 [node name="MicrobeEditor" type="Node"]
 script = ExtResource( 2 )
@@ -1223,7 +1226,11 @@ __meta__ = {
 
 [node name="World" type="Node" parent="."]
 
-[node name="EditorHex" parent="World" instance=ExtResource( 3 )]
+[node name="EditorLight" type="OmniLight" parent="World"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.33046, 0 )
+shadow_enabled = true
+omni_range = 100.0
+omni_attenuation = 0.420448
 
 [node name="MicrobeEditorGUI" type="Node" parent="."]
 pause_mode = 2
@@ -1243,6 +1250,7 @@ ATPProductionBarPath = NodePath("CellEditor/ATPBalancePanel/MarginContainer/VBox
 ATPConsumptionBarPath = NodePath("CellEditor/ATPBalancePanel/MarginContainer/VBoxContainer/AtpConsumptionBar")
 ATPProductionLabelPath = NodePath("CellEditor/ATPBalancePanel/MarginContainer/VBoxContainer/AtpProductionBar/Value")
 ATPConsumptionLabelPath = NodePath("CellEditor/ATPBalancePanel/MarginContainer/VBoxContainer/AtpConsumptionBar/Value")
+GlucoseReductionLabelPath = NodePath("Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer/GlucoseReduction")
 AutoEvoLabelPath = NodePath("Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer/AutoEvoResults")
 ExternalEffectsLabelPath = NodePath("Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer/ExternalEffectsList")
 MapDrawerPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/ScrollContainer/PatchMapDrawer")
@@ -1271,10 +1279,20 @@ CompoundsBoxButtonPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitConta
 CompoundsBoxPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer")
 SpeciesListButtonPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/SpeciesPresent/HBoxContainer/Buttons")
 MoveToPatchButtonPath = NodePath("PatchMap/MoveToPatchButton")
+PatchTemperatureSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer/Temperature/Situation")
+PatchLightSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer/Light/Situation")
+PatchHydrogenSulfideSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/HydrogenSulfide/Situation")
+PatchGlucoseSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Glucose/Situation")
+PatchIronSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Iron/Situation")
+PatchAmmoniaSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Ammonia/Situation")
+PatchPhosphateSituationPath = NodePath("PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Phosphate/Situation")
+RigiditySliderPath = NodePath("CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/RigiditySlider")
 SymmetryIconPath = NodePath("CellEditor/SymmetryButton/VBoxContainer/SymmetryIcon")
 SymmetryIcon2x = ExtResource( 77 )
 SymmetryIcon4x = ExtResource( 76 )
 SymmetryIcon6x = ExtResource( 75 )
+IncreaseIcon = ExtResource( 78 )
+DecreaseIcon = ExtResource( 3 )
 
 [node name="LeftTopBar" type="Control" parent="MicrobeEditorGUI"]
 margin_right = 810.0
@@ -2611,7 +2629,7 @@ text = "Cilia
 40 MP"
 align = 1
 
-[node name="InternalOrganelles" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="InternalOrganellesLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer"]
 margin_top = 540.0
 margin_right = 294.0
 margin_bottom = 575.0
@@ -2621,7 +2639,7 @@ text = "Internal Organelles"
 valign = 1
 uppercase = true
 
-[node name="InternalOrganelles2" type="GridContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer"]
+[node name="InternalOrganelles" type="GridContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer"]
 margin_top = 585.0
 margin_right = 294.0
 margin_bottom = 885.0
@@ -2631,7 +2649,7 @@ custom_constants/vseparation = 15
 custom_constants/hseparation = 12
 columns = 3
 
-[node name="nucleus" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="nucleus" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_right = 90.0
@@ -2648,7 +2666,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -2660,7 +2678,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -2670,13 +2688,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -2686,7 +2704,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -2694,7 +2712,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -2705,7 +2723,7 @@ size_flags_vertical = 0
 texture = ExtResource( 26 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -2715,7 +2733,7 @@ text = "Nucleus
 100 MP"
 align = 1
 
-[node name="mitochondrion" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="mitochondrion" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 102.0
@@ -2733,7 +2751,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -2745,7 +2763,7 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -2755,13 +2773,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -2771,7 +2789,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -2779,7 +2797,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -2790,7 +2808,7 @@ size_flags_vertical = 0
 texture = ExtResource( 21 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -2800,7 +2818,7 @@ text = "Mitochondrion
 45 MP"
 align = 1
 
-[node name="chloroplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="chloroplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 204.0
@@ -2818,7 +2836,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -2830,7 +2848,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -2840,13 +2858,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -2856,7 +2874,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -2864,7 +2882,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -2875,7 +2893,7 @@ size_flags_vertical = 0
 texture = ExtResource( 22 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -2885,7 +2903,7 @@ text = "Chloroplast
 50 MP"
 align = 1
 
-[node name="thermoplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="thermoplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_top = 105.0
@@ -2904,7 +2922,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -2916,7 +2934,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -2926,13 +2944,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -2942,7 +2960,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -2950,7 +2968,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -2961,7 +2979,7 @@ size_flags_vertical = 0
 texture = ExtResource( 20 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -2971,7 +2989,7 @@ text = "Thermoplast
 40 MP"
 align = 1
 
-[node name="chemoplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="chemoplast" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 102.0
@@ -2990,7 +3008,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -3002,7 +3020,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -3012,13 +3030,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -3028,7 +3046,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -3036,7 +3054,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -3047,7 +3065,7 @@ size_flags_vertical = 0
 texture = ExtResource( 24 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -3057,7 +3075,7 @@ text = "Chemoplast
 45 MP"
 align = 1
 
-[node name="nitrogenfixingplastid" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="nitrogenfixingplastid" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 204.0
@@ -3076,7 +3094,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -3088,7 +3106,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -3098,13 +3116,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -3114,7 +3132,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 54.0
@@ -3122,7 +3140,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 15
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 15.0
 margin_top = -4.0
 margin_right = 65.0
@@ -3133,7 +3151,7 @@ size_flags_vertical = 0
 texture = ExtResource( 19 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid/MarginContainer/VBoxContainer"]
 margin_top = 52.0
 margin_right = 80.0
 margin_bottom = 78.0
@@ -3144,7 +3162,7 @@ Plastid
 50 MP"
 align = 1
 
-[node name="vacuole" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="vacuole" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_top = 210.0
@@ -3162,7 +3180,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -3174,7 +3192,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -3184,13 +3202,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -3200,7 +3218,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -3208,7 +3226,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -3219,7 +3237,7 @@ size_flags_vertical = 0
 texture = ExtResource( 23 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -3229,7 +3247,7 @@ text = "Vacuole
 50 MP"
 align = 1
 
-[node name="oxytoxy" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="oxytoxy" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 102.0
@@ -3248,7 +3266,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -3260,7 +3278,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -3270,13 +3288,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -3286,7 +3304,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 64.0
@@ -3294,7 +3312,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 10
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 10.0
 margin_top = -4.0
 margin_right = 70.0
@@ -3305,7 +3323,7 @@ size_flags_vertical = 0
 texture = ExtResource( 16 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy/MarginContainer/VBoxContainer"]
 margin_top = 62.0
 margin_right = 80.0
 margin_bottom = 80.0
@@ -3315,7 +3333,7 @@ text = "Toxin Vacuole
 70 MP"
 align = 1
 
-[node name="bioluminescentVacuole" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2" groups=[
+[node name="bioluminescentVacuole" type="Button" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles" groups=[
 "OrganelleSelectionElement",
 ]]
 margin_left = 204.0
@@ -3335,7 +3353,7 @@ action_mode = 0
 enabled_focus_mode = 0
 group = SubResource( 33 )
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -3347,7 +3365,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer"]
 margin_left = 5.0
 margin_top = 5.0
 margin_right = 85.0
@@ -3357,13 +3375,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer/VBoxContainer"]
+[node name="SelectedLabelMargin" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer/VBoxContainer"]
 margin_right = 80.0
 margin_bottom = 10.0
 rect_min_size = Vector2( 80, 10 )
 mouse_filter = 1
 
-[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer/VBoxContainer/SelectedLabelMargin"]
+[node name="SelectedLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer/VBoxContainer/SelectedLabelMargin"]
 visible = false
 margin_right = 80.0
 margin_bottom = 10.0
@@ -3373,7 +3391,7 @@ align = 1
 valign = 1
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer/VBoxContainer"]
 margin_top = 8.0
 margin_right = 80.0
 margin_bottom = 54.0
@@ -3381,7 +3399,7 @@ mouse_filter = 2
 custom_constants/margin_top = -4
 custom_constants/margin_left = 15
 
-[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer/VBoxContainer/MarginContainer"]
 margin_left = 15.0
 margin_top = -4.0
 margin_right = 65.0
@@ -3392,7 +3410,7 @@ size_flags_vertical = 0
 texture = ExtResource( 25 )
 expand = true
 
-[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole/MarginContainer/VBoxContainer"]
+[node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole/MarginContainer/VBoxContainer"]
 margin_top = 52.0
 margin_right = 80.0
 margin_bottom = 78.0
@@ -3898,6 +3916,7 @@ expand = true
 margin_top = 62.0
 margin_right = 81.0
 margin_bottom = 80.0
+mouse_filter = 2
 custom_constants/margin_left = -5
 
 [node name="OrganelleLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/calcium_carbonate/MarginContainer/VBoxContainer/MarginContainer2"]
@@ -4017,6 +4036,9 @@ margin_bottom = 311.0
 mouse_filter = 1
 custom_styles/slider = SubResource( 37 )
 custom_styles/grabber_area = SubResource( 38 )
+min_value = -1.0
+max_value = 1.0
+step = 0.1
 
 [node name="ColourLabel" type="Label" parent="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer"]
 margin_top = 321.0
@@ -9580,37 +9602,52 @@ margin_bottom = 664.0
 follow_focus = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer"]
-margin_right = 122.0
-margin_bottom = 82.0
+margin_right = 537.0
+margin_bottom = 114.0
 custom_constants/separation = 0
 
+[node name="GlucoseReduction" type="Label" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_right = 537.0
+margin_bottom = 17.0
+custom_fonts/font = SubResource( 9 )
+text = "The amount of glucose has been reduced to ... of the previous amount."
+
+[node name="HSeparator2" type="HSeparator" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
+margin_top = 17.0
+margin_right = 537.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 0, 10 )
+custom_styles/separator = SubResource( 61 )
+
 [node name="Label" type="Label" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_right = 122.0
-margin_bottom = 15.0
+margin_top = 27.0
+margin_right = 537.0
+margin_bottom = 44.0
 custom_fonts/font = SubResource( 9 )
 text = "Auto-evo results:"
 
 [node name="AutoEvoResults" type="Label" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_top = 15.0
-margin_right = 122.0
-margin_bottom = 29.0
+margin_top = 44.0
+margin_right = 537.0
+margin_bottom = 58.0
 
 [node name="HSeparator" type="HSeparator" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_top = 29.0
-margin_right = 122.0
-margin_bottom = 54.0
+margin_top = 58.0
+margin_right = 537.0
+margin_bottom = 83.0
 rect_min_size = Vector2( 0, 25 )
 
 [node name="Label2" type="Label" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_top = 54.0
-margin_right = 122.0
-margin_bottom = 68.0
+margin_top = 83.0
+margin_right = 537.0
+margin_bottom = 100.0
+custom_fonts/font = SubResource( 9 )
 text = "External effects:"
 
 [node name="ExternalEffectsList" type="Label" parent="MicrobeEditorGUI/Report/EvoResultsPanel/MarginContainer/ScrollContainer/VBoxContainer"]
-margin_top = 68.0
-margin_right = 122.0
-margin_bottom = 82.0
+margin_top = 100.0
+margin_right = 537.0
+margin_bottom = 114.0
 
 [node name="NextTabButton" type="Button" parent="MicrobeEditorGUI/Report"]
 anchor_left = 1.0
@@ -9750,7 +9787,7 @@ custom_constants/separation = 0
 [node name="PatchName" type="Label" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/VBoxContainer"]
 margin_right = 528.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 61 )
+custom_fonts/font = SubResource( 62 )
 text = "Patch Name Goes Here"
 align = 1
 
@@ -9758,7 +9795,7 @@ align = 1
 margin_top = 32.0
 margin_right = 528.0
 margin_bottom = 50.0
-custom_fonts/font = SubResource( 62 )
+custom_fonts/font = SubResource( 63 )
 text = "YOU ARE CURRENTLY IN THIS PATCH"
 align = 1
 
@@ -9766,7 +9803,7 @@ align = 1
 margin_top = 65.0
 margin_right = 528.0
 margin_bottom = 87.0
-custom_fonts/font = SubResource( 63 )
+custom_fonts/font = SubResource( 64 )
 text = "Biome: BIOME HERE"
 align = 1
 
@@ -9774,7 +9811,7 @@ align = 1
 margin_top = 102.0
 margin_right = 528.0
 margin_bottom = 124.0
-custom_fonts/font = SubResource( 63 )
+custom_fonts/font = SubResource( 64 )
 text = "200-340m below sea level"
 align = 1
 
@@ -9817,7 +9854,7 @@ margin_left = 31.0
 margin_top = 4.0
 margin_right = 208.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Physical Conditions"
 
 [node name="GridContainer" type="GridContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions"]
@@ -9843,8 +9880,16 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 146.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Temperature"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer/Temperature"]
+margin_left = 150.0
+margin_right = 162.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="Pressure" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer"]
 margin_left = 266.0
@@ -9864,7 +9909,7 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 114.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Pressure"
 
 [node name="Light" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer"]
@@ -9885,8 +9930,16 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 79.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Light"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/PhysicalConditions/GridContainer/Light"]
+margin_left = 83.0
+margin_right = 95.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="AtmosphericConditions" type="VBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer"]
 margin_top = 250.0
@@ -9927,7 +9980,7 @@ margin_left = 31.0
 margin_top = 4.0
 margin_right = 214.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Atmospheric Gasses"
 
 [node name="GridContainer" type="GridContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/AtmosphericConditions"]
@@ -9953,7 +10006,7 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 102.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Oxygen"
 
 [node name="Nitrogen" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/AtmosphericConditions/GridContainer"]
@@ -9974,7 +10027,7 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 111.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Nitrogen"
 
 [node name="CO2" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/AtmosphericConditions/GridContainer"]
@@ -9995,7 +10048,7 @@ margin_left = 34.0
 margin_top = 3.0
 margin_right = 66.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "CO2"
 
 [node name="Compounds" type="VBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer"]
@@ -10037,7 +10090,7 @@ margin_left = 31.0
 margin_top = 4.0
 margin_right = 140.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Compounds"
 
 [node name="GridContainer" type="GridContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds"]
@@ -10063,8 +10116,16 @@ margin_left = 29.0
 margin_top = 3.0
 margin_right = 186.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Hydrogen Sulfide"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/HydrogenSulfide"]
+margin_left = 190.0
+margin_right = 202.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="Ammonia" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer"]
 margin_left = 266.0
@@ -10084,8 +10145,16 @@ margin_left = 29.0
 margin_top = 3.0
 margin_right = 108.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Ammonia"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Ammonia"]
+margin_left = 112.0
+margin_right = 124.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="Glucose" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer"]
 margin_top = 29.0
@@ -10105,8 +10174,16 @@ margin_left = 29.0
 margin_top = 3.0
 margin_right = 102.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Glucose"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Glucose"]
+margin_left = 106.0
+margin_right = 118.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="Phosphate" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer"]
 margin_left = 266.0
@@ -10127,8 +10204,16 @@ margin_left = 29.0
 margin_top = 3.0
 margin_right = 126.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Phosphate"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Phosphate"]
+margin_left = 130.0
+margin_right = 142.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="Iron" type="HBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer"]
 margin_top = 58.0
@@ -10148,8 +10233,16 @@ margin_left = 29.0
 margin_top = 3.0
 margin_right = 64.0
 margin_bottom = 22.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Iron"
+
+[node name="Situation" type="TextureRect" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/Compounds/GridContainer/Iron"]
+margin_left = 68.0
+margin_right = 80.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 12, 12 )
+size_flags_vertical = 0
+expand = true
 
 [node name="SpeciesPresent" type="VBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer"]
 margin_top = 501.0
@@ -10190,14 +10283,14 @@ margin_left = 31.0
 margin_top = 4.0
 margin_right = 177.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 64 )
+custom_fonts/font = SubResource( 65 )
 text = "Species Present"
 
 [node name="SpeciesList" type="VBoxContainer" parent="MicrobeEditorGUI/PatchMap/MapPanel/MarginContainer/HSplitContainer/HBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/PatchDetailsContainer/SpeciesPresent"]
 margin_top = 42.0
 margin_right = 528.0
 margin_bottom = 42.0
-theme = SubResource( 66 )
+theme = SubResource( 67 )
 
 [node name="NextTabButton" type="Button" parent="MicrobeEditorGUI/PatchMap"]
 anchor_left = 1.0
@@ -10386,31 +10479,31 @@ visible = false
 [connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/ExternalOrganelles/pilus" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "pilus" ]]
 [connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/ExternalOrganelles/cilia" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "cilia" ]]
 [connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/ExternalOrganelles/cilia" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "nucleus" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nucleus" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "nucleus" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "mitochondrion" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/mitochondrion" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "mitochondrion" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "chloroplast" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chloroplast" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "chloroplast" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "thermoplast" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/thermoplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "chemoplast" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/chemoplast" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "chemoplast" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "nitrogenfixingplastid" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "nitrogenfixingplastid" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "vacuole" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/vacuole" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "vacuole" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "oxytoxy" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy" to="MicrobeEditorGUI" method="OnItemMouseExit"]
-[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/oxytoxy" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "oxytoxy" ]]
-[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "bioluminescentVacuole" ]]
-[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles2/bioluminescentVacuole" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "nucleus" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nucleus" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "nucleus" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "mitochondrion" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/mitochondrion" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "mitochondrion" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "chloroplast" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chloroplast" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "chloroplast" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "thermoplast" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/thermoplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "chemoplast" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/chemoplast" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "chemoplast" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "nitrogenfixingplastid" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/nitrogenfixingplastid" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "nitrogenfixingplastid" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "vacuole" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/vacuole" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "vacuole" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "oxytoxy" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy" to="MicrobeEditorGUI" method="OnItemMouseExit"]
+[connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/oxytoxy" to="MicrobeEditorGUI" method="OnOrganelleToPlaceSelected" binds= [ "oxytoxy" ]]
+[connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "bioluminescentVacuole" ]]
+[connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Structure/ScrollContainer/MarginContainer/VBoxContainer/InternalOrganelles/bioluminescentVacuole" to="MicrobeEditorGUI" method="OnItemMouseExit"]
 [connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/single" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "membraneSingle" ]]
 [connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/single" to="MicrobeEditorGUI" method="OnItemMouseExit"]
 [connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/single" to="MicrobeEditorGUI" method="OnMembraneSelected" binds= [ "single" ]]
@@ -10429,6 +10522,7 @@ visible = false
 [connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/silica" to="MicrobeEditorGUI" method="OnItemMouseHover" binds= [ "membraneSilica" ]]
 [connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/silica" to="MicrobeEditorGUI" method="OnItemMouseExit"]
 [connection signal="pressed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/MembraneTypes/silica" to="MicrobeEditorGUI" method="OnMembraneSelected" binds= [ "silica" ]]
+[connection signal="value_changed" from="MicrobeEditorGUI/CellEditor/LeftPanel/Panel/Membrane/ScrollContainer/MarginContainer/VBoxContainer/RigiditySlider" to="MicrobeEditorGUI" method="OnRigidityChanged"]
 [connection signal="mouse_entered" from="MicrobeEditorGUI/CellEditor/BottomBar" to="MicrobeEditorGUI" method="OnMouseEnter"]
 [connection signal="mouse_exited" from="MicrobeEditorGUI/CellEditor/BottomBar" to="MicrobeEditorGUI" method="OnMouseExit"]
 [connection signal="pressed" from="MicrobeEditorGUI/CellEditor/BottomBar/MenuButton" to="MicrobeEditorGUI" method="MenuButtonPressed"]
