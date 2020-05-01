@@ -8,7 +8,7 @@ using Godot;
 /// </summary>
 public class MicrobeHUD : Node
 {
-    public VBoxContainer barPanels;
+    public VBoxContainer BarPanels;
     private VBoxContainer iconPanels;
     private AnimationPlayer animationPlayer;
 
@@ -84,7 +84,7 @@ public class MicrobeHUD : Node
         panelExpand = GetNode<PanelContainer>("LeftPanels/CompoundsPanel/Expand");
         panelCompress = GetNode<PanelContainer>("LeftPanels/CompoundsPanel/Compress");
 
-        barPanels = GetNode<VBoxContainer>(
+        BarPanels = GetNode<VBoxContainer>(
             "LeftPanels/CompoundsPanel/Expand/VBoxContainer/MarginContainer2/MarginContainer/VBoxContainer");
         iconPanels = GetNode<VBoxContainer>(
             "LeftPanels/CompoundsPanel/Expand/VBoxContainer/MarginContainer2/IconContainer");
@@ -298,29 +298,31 @@ public class MicrobeHUD : Node
             if (compounds.IsUseful(stage.CompoundArray[i]))
             {
                 if (compoundBarArray[i].GetParent() == null)
-                    barPanels.AddChild(compoundBarArray[i]);
+                    BarPanels.AddChild(compoundBarArray[i]);
                 if (compoundIconArray[i].GetParent() == null)
                     iconPanels.AddChild(compoundIconArray[i]);
             }
             else
             {
                 if (compoundBarArray[i].GetParent() != null)
-                    barPanels.RemoveChild(compoundBarArray[i]);
+                    BarPanels.RemoveChild(compoundBarArray[i]);
                 if (compoundIconArray[i].GetParent() != null)
                     iconPanels.RemoveChild(compoundIconArray[i]);
             }
         }
     }
+
     /// <summary>
     ///   Stores the compound bar and icon in the class array
     ///   Prevents bar nad icon from being lost when removes from tree
     /// </summary>
     private void StoreCompoundBarAndIcon()
     {
-        foreach (ProgressBar bar in barPanels.GetChildren())
+        foreach (ProgressBar bar in BarPanels.GetChildren())
         {
             compoundBarArray.Add(bar);
         }
+
         foreach (TextureRect icon in iconPanels.GetChildren())
         {
             compoundIconArray.Add(icon);
