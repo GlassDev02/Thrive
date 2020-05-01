@@ -72,9 +72,9 @@ public class GUICommon : Node
         tween.Start();
     }
 
-    public void TweenUIProperty(Control ui, string property, object initialValue, object targetValue, float duration,
-        Tween.TransitionType transitionType = Tween.TransitionType.Linear, Tween.EaseType easeType = Tween.EaseType.InOut,
-        float delay = 0)
+    public void TweenUIProperty(Control ui, string property, object initialValue, object targetValue, 
+        float duration, Tween.TransitionType transitionType = Tween.TransitionType.Linear,
+        Tween.EaseType easeType = Tween.EaseType.InOut, float delay = 0)
     {
         tween.InterpolateProperty(ui, property, initialValue, targetValue, duration,
             transitionType, easeType, delay);

@@ -551,7 +551,8 @@ public class MicrobeHUD : Node
 
         hydrogenSulfideBar.MaxValue = compounds.Capacity;
         hydrogenSulfideBar.Value = compounds.GetCompoundAmount("hydrogensulfide");
-        hydrogenSulfideBar.GetNode<Label>("Value").Text = hydrogenSulfideBar.Value + " / " + hydrogenSulfideBar.MaxValue;
+        hydrogenSulfideBar.GetNode<Label>("Value").Text = hydrogenSulfideBar.Value + " / " +
+            hydrogenSulfideBar.MaxValue;
 
         ironBar.MaxValue = compounds.Capacity;
         ironBar.Value = compounds.GetCompoundAmount("iron");
