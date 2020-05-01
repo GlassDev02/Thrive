@@ -8,10 +8,18 @@ using Godot;
 /// </summary>
 public class MicrobeHUD : Node
 {
+    public VBoxContainer barPanels;
+    private VBoxContainer iconPanels;
     private AnimationPlayer animationPlayer;
 
     private PanelContainer mouseHoverPanel;
     private VBoxContainer hoveredItems;
+    private Control agentsPanel;
+    private VBoxContainer leftPanels;
+    private List<ProgressBar> compoundBarArray;
+    private List<TextureRect> compoundIconArray;
+    private PanelContainer panelExpand;
+    private PanelContainer panelCompress;
 
     private Control menu;
     private Control pauseButtonContainer;
@@ -71,6 +79,19 @@ public class MicrobeHUD : Node
     {
         mouseHoverPanel = GetNode<PanelContainer>("MouseHoverPanel");
         pauseButtonContainer = GetNode<MarginContainer>("BottomBar/PauseButtonMargin");
+        leftPanels = GetNode<VBoxContainer>("LeftPanels");
+        agentsPanel = GetNode<Control>("LeftPanels/AgentsPanel");
+        panelExpand = GetNode<PanelContainer>("LeftPanels/CompoundsPanel/Expand");
+        panelCompress = GetNode<PanelContainer>("LeftPanels/CompoundsPanel/Compress");
+
+        barPanels = GetNode<VBoxContainer>(
+            "LeftPanels/CompoundsPanel/Expand/VBoxContainer/MarginContainer2/MarginContainer/VBoxContainer");
+        iconPanels = GetNode<VBoxContainer>(
+            "LeftPanels/CompoundsPanel/Expand/VBoxContainer/MarginContainer2/IconContainer");
+        compoundBarArray = new List<ProgressBar>();
+        compoundIconArray = new List<TextureRect>();
+        StoreCompoundBarAndIcon();
+
         dataValue = GetNode<PanelContainer>("BottomRight/DataValue");
         atpLabel = dataValue.GetNode<Label>("Margin/VBox/ATPValue");
         hpLabel = dataValue.GetNode<Label>("Margin/VBox/HPValue");
@@ -251,6 +272,62 @@ public class MicrobeHUD : Node
     }
 
     /// <summary>
+    ///   Updates the GUI bars to show only needed compounds
+    /// </summary>
+    public void UpdateNeededBars()
+    {
+        if (stage.Player == null)
+            return;
+
+        var compounds = stage.Player.Compounds;
+        if (!compounds.HasAnyBeenSetUseful())
+            return;
+        if (compounds.IsUseful("oxytoxy"))
+        {
+            if (agentsPanel.GetParent() == null)
+                leftPanels.AddChild(agentsPanel);
+        }
+        else
+        {
+            if (agentsPanel.GetParent() != null)
+                leftPanels.RemoveChild(agentsPanel);
+        }
+
+        for (int i = 0; i < stage.CompoundArray.Count; i++)
+        {
+            if (compounds.IsUseful(stage.CompoundArray[i]))
+            {
+                if (compoundBarArray[i].GetParent() == null)
+                    barPanels.AddChild(compoundBarArray[i]);
+                if (compoundIconArray[i].GetParent() == null)
+                    iconPanels.AddChild(compoundIconArray[i]);
+            }
+            else
+            {
+                if (compoundBarArray[i].GetParent() != null)
+                    barPanels.RemoveChild(compoundBarArray[i]);
+                if (compoundIconArray[i].GetParent() != null)
+                    iconPanels.RemoveChild(compoundIconArray[i]);
+            }
+        }
+    }
+    /// <summary>
+    ///   Stores the compound bar and icon in the class array
+    ///   Prevents bar nad icon from being lost when removes from tree
+    /// </summary>
+    private void StoreCompoundBarAndIcon()
+    {
+        foreach (ProgressBar bar in barPanels.GetChildren())
+        {
+            compoundBarArray.Add(bar);
+        }
+        foreach (TextureRect icon in iconPanels.GetChildren())
+        {
+            compoundIconArray.Add(icon);
+        }
+    }
+
+    /// <summary>
     ///   Updates the mouse hover box with stuff.
     /// </summary>
     /// <remarks>
@@ -260,6 +337,7 @@ public class MicrobeHUD : Node
     ///     how the old JS code do it anyway.
     ///   </para>
     /// </remarks>
+
     private void UpdateHoverInfo()
     {
         foreach (Node children in hoveredItems.GetChildren())
