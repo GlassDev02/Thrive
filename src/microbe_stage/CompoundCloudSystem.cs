@@ -172,6 +172,28 @@ public class CompoundCloudSystem : Node
         }
     }
 
+    private void SetUpCloudLinks(
+        Dictionary<Tuple<Int2, string>, CompoundCloudPlane> clouds)
+    {
+        foreach(var kvp in clouds) {
+            var index = kvp.Key;
+            var cloudComponent = kvp.Value;
+            var tile = index.Item1;
+            var groupId = index.Item2;
+
+            cloudComponent.UpperCloud =
+                tile.y == -1 ? null : clouds[Tuple.Create(tile + new Int2(0, -1), groupId)];
+            cloudComponent.LowerCloud =
+                tile.y == 1  ? null : clouds[Tuple.Create(tile + new Int2(0, 1),  groupId)];
+            cloudComponent.LeftCloud =
+                tile.x == -1 ? null : clouds[Tuple.Create(tile + new Int2(-1, 0), groupId)];
+            cloudComponent.RightCloud =
+                tile.x == 1  ? null : clouds[Tuple.Create(tile + new Int2(1, 0),  groupId)];
+        }
+    }
+
+
+
     /// <summary>
     ///   Resets the cloud contents and positions as well as the compound types they store
     /// </summary>
@@ -237,7 +259,7 @@ public class CompoundCloudSystem : Node
             // Position the cloud taking into account how many clouds
             // need to be at the same position.
             // Doing this here makes the cloud reposition logic simpler.
-            clouds[i].Translation = positions[positionIndex];
+            clouds[i].Translation = positions[positionIndex].Item2;
 
             ++positionedCounter;
 
@@ -460,37 +482,37 @@ public class CompoundCloudSystem : Node
         }
     }
 
-    private static Vector3[]
+    private static Tuple<Int2, Vector3>[]
         CalculateGridPositions(Vector3 center)
     {
-        return new Vector3[]
+        return new Tuple<Int2, Vector3>[9]
         {
             // Center
-            center,
+            Tuple.Create(new Int2(0, 0), center),
 
             // Top left
-            center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(-1, -1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2)),
 
             // Up
-            center + new Vector3(0, 0, -Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(0, -1), center + new Vector3(0, 0, -Constants.CLOUD_HEIGHT * 2)),
 
             // Top right
-            center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(1, -1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2)),
 
             // Left
-            center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, 0),
+            Tuple.Create(new Int2(-1, 0), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, 0)),
 
             // Right
-            center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, 0),
+            Tuple.Create(new Int2(1, 0), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, 0)),
 
             // Bottom left
-            center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(-1, 1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2)),
 
             // Down
-            center + new Vector3(0, 0, Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(0, 1), center + new Vector3(0, 0, Constants.CLOUD_HEIGHT * 2)),
 
             // Bottom right
-            center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2),
+            Tuple.Create(new Int2(1, 1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2)),
         };
     }
 
@@ -526,7 +548,7 @@ public class CompoundCloudSystem : Node
             {
                 // An exact check might work but just to be safe slight
                 // inaccuracy is allowed here
-                if ((cloud.Translation - requiredPos).LengthSquared() < 0.01f)
+                if ((cloud.Translation - requiredPos.Item2).LengthSquared() < 0.01f)
                 {
                     matched = true;
                     break;
@@ -558,7 +580,7 @@ public class CompoundCloudSystem : Node
                 {
                     // An exact check might work but just to be safe slight
                     // inaccuracy is allowed here
-                    if ((cloud.Translation - requiredPos).LengthSquared() < 0.01f)
+                    if ((cloud.Translation - requiredPos.Item2).LengthSquared() < 0.01f)
                     {
                         // Check that the group of the cloud is correct
                         if (groupType == cloud.Compound1)
@@ -586,7 +608,7 @@ public class CompoundCloudSystem : Node
 
                         // Move it
                         tooFarAwayClouds[checkReposition].RecycleToPosition(
-                            requiredPos);
+                            requiredPos.Item2);
 
                         // Set to null to skip on next scan
                         tooFarAwayClouds[checkReposition] = null;
