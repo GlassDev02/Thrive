@@ -57,6 +57,9 @@ public class MicrobeHUD : Node
     [Export]
     public NodePath AgentsPanelBarContainerPath;
     [Export]
+    public NodePath HelpScreenPath;
+
+    [Export]
     public PackedScene ExtinctionBoxScene;
     [Export]
     public PackedScene WinBoxScene;
@@ -96,6 +99,7 @@ public class MicrobeHUD : Node
     private TextureButton editorButton;
     private Node extinctionBox;
     private Node winBox;
+    private Control helpScreen;
 
     private List<HBoxContainer> compoundBarArray = new List<HBoxContainer>();
 
@@ -153,6 +157,7 @@ public class MicrobeHUD : Node
         populationLabel = GetNode<Label>(PopulationLabelPath);
         patchLabel = GetNode<Label>(PatchLabelPath);
         editorButton = GetNode<TextureButton>(EditorButtonPath);
+        helpScreen = GetNode<Control>(HelpScreenPath);
 
         OnEnterStageTransition();
 
@@ -380,6 +385,22 @@ public class MicrobeHUD : Node
         }
     }
 
+    public void ToggleHelpScreen()
+    {
+        GUICommon.Instance.PlayButtonPressSound();
+
+        if (!helpScreen.Visible)
+        {
+            helpScreen.Show();
+            menu.Hide();
+        }
+        else
+        {
+            helpScreen.Hide();
+            menu.Show();
+        }
+    }
+
     /// <summary>
     ///   Updates the GUI bars to show only needed compounds
     /// </summary>
@@ -453,6 +474,11 @@ public class MicrobeHUD : Node
 
         if (mouseHoverPanel.RectSize != new Vector2(270, 130))
             mouseHoverPanel.RectSize = new Vector2(270, 130);
+
+        if (mouseHoverPanel.MarginLeft != -280)
+            mouseHoverPanel.MarginLeft = -280;
+        if (mouseHoverPanel.MarginRight != -10)
+            mouseHoverPanel.MarginRight = -10;
 
         var compounds = stage.Clouds.GetAllAvailableAt(stage.Camera.CursorWorldPos);
 
