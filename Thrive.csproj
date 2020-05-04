@@ -63,9 +63,12 @@
     <Compile Include="scripts\gui\TransitionManager.cs" />
     <Compile Include="scripts\gui\VersionNumber.cs" />
     <Compile Include="scripts\simulation_parameters\Constants.cs" />
+    <Compile Include="src\engine\FPSCounter.cs" />
     <Compile Include="src\engine\ScreenFilter.cs" />
     <Compile Include="src\engine\FilterLoader.cs" />
+    <Compile Include="src\engine\CursorLoader.cs" />
     <Compile Include="src\general\LoadingScreen.cs" />
+    <Compile Include="src\general\OptionsMenu.cs" />
     <Compile Include="src\general\SceneDisplayer.cs" />
     <Compile Include="src\microbe_stage\AgentProjectile.cs" />
     <Compile Include="src\microbe_stage\CompoundCloudPlane.cs" />
@@ -160,6 +163,8 @@
     <Compile Include="src\auto-evo\simulation\PopulationSimulation.cs" />
     <Compile Include="src\auto-evo\steps\VariantTryingStep.cs" />
     <Compile Include="src\auto-evo\ExternalEffect.cs" />
+    <Compile Include="src\general\Jukebox.cs" />
+    <Compile Include="src\general\MusicCategory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="StyleCop.ruleset" />

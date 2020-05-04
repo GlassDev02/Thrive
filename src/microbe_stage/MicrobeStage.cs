@@ -98,6 +98,8 @@ public class MicrobeStage : Node
         }
 
         CreatePatchManagerIfNeeded();
+
+        StartMusic();
     }
 
     public void StartNewGame()
@@ -107,12 +109,17 @@ public class MicrobeStage : Node
         CreatePatchManagerIfNeeded();
 
         patchManager.ApplyChangedPatchSettingsIfNeeded(GameWorld.Map.CurrentPatch);
+        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
         UpdateBackground();
 
         SpawnPlayer();
         Camera.ResetHeight();
+    }
 
-        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
+    public void StartMusic()
+    {
+        Jukebox.Instance.PlayingCategory = "MicrobeStage";
+        Jukebox.Instance.Resume();
     }
 
     /// <summary>
@@ -177,7 +184,6 @@ public class MicrobeStage : Node
         if (gameOver)
         {
             // Player is extinct and has lost the game
-
             // Show the game lost popup if not already visible
             HUD.ShowExtinctionBox();
 
@@ -218,6 +224,11 @@ public class MicrobeStage : Node
     /// </summary>
     public void MoveToEditor()
     {
+        // Increase the population by the constant for the player reproducing
+        var playerSpecies = GameWorld.PlayerSpecies;
+        GameWorld.AlterSpeciesPopulation(
+            playerSpecies, Constants.PLAYER_REPRODUCTION_POPULATION_GAIN, "player reproduced");
+
         var scene = GD.Load<PackedScene>("res://src/microbe_stage/editor/MicrobeEditor.tscn");
 
         var editor = (MicrobeEditor)scene.Instance();
@@ -240,6 +251,9 @@ public class MicrobeStage : Node
 
         // Now the editor increases the generation so we don't do that here anymore
 
+        // Make sure player is spawned
+        SpawnPlayer();
+
         // Check win conditions
         if (!CurrentGame.FreeBuild && Player.Species.Generation >= 20 &&
             Player.Species.Population >= 300 && !wonOnce)
@@ -247,9 +261,6 @@ public class MicrobeStage : Node
             HUD.ToggleWinBox();
             wonOnce = true;
         }
-
-        // Make sure player is spawned
-        SpawnPlayer();
 
         // Update the player's cell
         Player.ApplySpecies(Player.Species);
@@ -261,7 +272,8 @@ public class MicrobeStage : Node
 
         HUD.OnEnterStageTransition();
         HUD.HideReproductionDialog();
-        HUD.UpdatePatchInfo(GameWorld.Map.CurrentPatch.Name);
+
+        StartMusic();
     }
 
     private void CreatePatchManagerIfNeeded()
@@ -279,8 +291,9 @@ public class MicrobeStage : Node
     {
         var playerSpecies = GameWorld.PlayerSpecies;
 
-        // Decrease the population by 20
-        GameWorld.AlterSpeciesPopulation(playerSpecies, -20, "player died", true);
+        // Decrease the population by the constant for the player dying
+        GameWorld.AlterSpeciesPopulation(
+            playerSpecies, Constants.PLAYER_DEATH_POPULATION_LOSS, "player died", true);
 
         // Respawn if not extinct (or freebuild)
         if (playerSpecies.Population <= 0 && !CurrentGame.FreeBuild)

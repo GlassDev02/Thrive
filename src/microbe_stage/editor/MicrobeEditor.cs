@@ -16,7 +16,6 @@ public class MicrobeEditor : Node
     /// <summary>
     ///   Selected colour for the species
     /// </summary>
-    public Color Colour;
 
     private int symmetry = 0;
 
@@ -288,6 +287,8 @@ public class MicrobeEditor : Node
         }
 
         InitEditor();
+
+        StartMusic();
     }
 
     /// <summary>
@@ -324,8 +325,9 @@ public class MicrobeEditor : Node
             editedSpecies.FormattedName);
 
         // Update name
+        NewName = gui.GetNewSpeciesName();
         var splits = NewName.Split(" ");
-        if (splits.Length != 2)
+        if (splits.Length == 2)
         {
             editedSpecies.Genus = splits[0];
             editedSpecies.Epithet = splits[1];
@@ -340,7 +342,7 @@ public class MicrobeEditor : Node
 
         // Update membrane
         editedSpecies.MembraneType = Membrane;
-        editedSpecies.Colour = Colour;
+        editedSpecies.Colour = gui.GetMembraneColor();
         editedSpecies.MembraneRigidity = Rigidity;
 
         // Move patches
@@ -356,6 +358,12 @@ public class MicrobeEditor : Node
         ReturnToStage.OnReturnFromEditor();
 
         QueueFree();
+    }
+
+    public void StartMusic()
+    {
+        Jukebox.Instance.PlayingCategory = "MicrobeEditor";
+        Jukebox.Instance.Resume();
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -430,9 +438,16 @@ public class MicrobeEditor : Node
     /// </summary>
     public void CalculateOrganelleEffectivenessInPatch(Patch patch = null)
     {
-        // TODO: fix (needed for the editor tooltips)
-        // ProcessSystem.ComputeOrganelleProcessEfficiencies
-        SimulationParameters.Instance.GetAllOrganelles();
+        if (patch == null)
+        {
+            patch = CurrentPatch;
+        }
+
+        var organelles = SimulationParameters.Instance.GetAllOrganelles();
+
+        var result = ProcessSystem.ComputeOrganelleProcessEfficiencies(organelles, patch.Biome);
+
+        gui.UpdateOrganelleEfficiencies(result);
     }
 
     /// <summary>
@@ -443,60 +458,34 @@ public class MicrobeEditor : Node
         if (!FreeBuilding)
             throw new InvalidOperationException("can't reset cell when not freebuilding");
 
-        // TODO: fix
-        throw new NotImplementedException();
+        var previousMP = MutationPoints;
+        var oldEditedMicrobeOrganelles = new OrganelleLayout<OrganelleTemplate>();
 
-        // // organelleCount = 0;
-        // var previousMP = mutationPoints;
-        // // Copy current microbe to a new array
-        // array < PlacedOrganelle@> oldEditedMicrobeOrganelles = editedMicrobeOrganelles;
+        foreach (var organelle in editedMicrobeOrganelles)
+        {
+            oldEditedMicrobeOrganelles.Add(organelle);
+        }
 
-        // EditorAction@ action = EditorAction(0,
-        //     // redo
-        //     function(EditorAction@ action, MicrobeEditor@ editor){
-        //     // Delete the organelles (all except the nucleus) and set mutation points
-        //     // (just undoing and redoing the cost like other actions doesn't work in
-        //     // this case due to its nature)
-        //     editor.setMutationPoints(BASE_MUTATION_POINTS);
-        //     for (uint i = editor.editedMicrobeOrganelles.length() - 1; i > 0; --i)
-        //     {
-        //         const PlacedOrganelle@ organelle = editor.editedMicrobeOrganelles[i];
-        //         var hexes = organelle.organelle.getRotatedHexes(organelle.rotation);
-        //         for (uint c = 0; c < hexes.length(); ++c)
-        //         {
-        //             int posQ = int(hexes[c].X) + organelle.q;
-        //             int posR = int(hexes[c].Y) + organelle.r;
-        //             var organelleHere = OrganellePlacement::getOrganelleAt(
-        //                 editor.editedMicrobeOrganelles, Int2(posQ, posR));
-        //             if (organelleHere! is null)
-        //             {
-        //                OrganellePlacement::removeOrganelleAt(editor.editedMicrobeOrganelles,
-        //                     Int2(posQ, posR));
-        //             }
-        //
-        //         }
-        //     }
-        //
-        //     editor._onEditedCellChanged();
-        //
-        // },
-        //     function(EditorAction@ action, MicrobeEditor@ editor){
-        //     editor.editedMicrobeOrganelles.resize(0);
-        //     editor.setMutationPoints(int(action.data["previousMP"]));
-        //     // Load old microbe
-        //     array < PlacedOrganelle@> oldEditedMicrobeOrganelles =
-        //           cast<array<PlacedOrganelle@>> (action.data["oldEditedMicrobeOrganelles"]);
-        //     for (uint i = 0; i < oldEditedMicrobeOrganelles.length(); ++i)
-        //     {
-        //         editor.editedMicrobeOrganelles.insertLast(cast<PlacedOrganelle>(
-        //             oldEditedMicrobeOrganelles[i]));
-        //     }
-        //
-        //     editor._onEditedCellChanged();
-        // });
-        // @action.data["oldEditedMicrobeOrganelles"] = oldEditedMicrobeOrganelles;
-        // action.data["previousMP"] = previousMP;
-        // EnqueueAction(action);
+        var action = new EditorAction(this, 0,
+            redo =>
+            {
+                MutationPoints = Constants.BASE_MUTATION_POINTS;
+                editedMicrobeOrganelles.RemoveAll();
+                editedMicrobeOrganelles.Add(new OrganelleTemplate(GetOrganelleDefinition("cytoplasm"),
+                    new Hex(0, 0), 0));
+            },
+            undo =>
+            {
+                editedMicrobeOrganelles.RemoveAll();
+                MutationPoints = previousMP;
+
+                foreach (var organelle in oldEditedMicrobeOrganelles)
+                {
+                    editedMicrobeOrganelles.Add(organelle);
+                }
+            });
+
+        EnqueueAction(action);
     }
 
     public void Redo()
@@ -521,7 +510,7 @@ public class MicrobeEditor : Node
 
     public void RotateRight()
     {
-        organelleRot = (organelleRot + 1) % 5;
+        organelleRot = (organelleRot + 1) % 6;
     }
 
     public void RotateLeft()
@@ -582,42 +571,35 @@ public class MicrobeEditor : Node
         if (Math.Abs(Rigidity - rigidity) < MathUtils.EPSILON)
             return;
 
-        throw new NotImplementedException();
+        var cost = (int)(Math.Abs(rigidity - Rigidity) / 2 * 100);
 
-        // float newRigidity = float(vars.GetSingleValueByName("rigidity"));
-        // int cost = int(abs(newRigidity - rigidity) / 2 * 100);
+        if (cost > 0)
+        {
+            if (cost > MutationPoints)
+            {
+                rigidity = Rigidity + (rigidity < Rigidity ? -MutationPoints : MutationPoints) * 2 / 100.0f;
+                cost = MutationPoints;
+            }
 
-        // if (cost > 0) {
-        //     if (cost > mutationPoints){
-        //         newRigidity = rigidity + (newRigidity < rigidity ? -mutationPoints :
-        //             mutationPoints) * 2 / 100.f;
-        //         cost = mutationPoints;
-        //     }
-        //
-        //     EditorAction@ action = EditorAction(cost,
-        //         // redo
-        //         function(EditorAction@ action, MicrobeEditor@ editor){
-        //             editor.rigidity = float(action.data["rigidity"]);
-        //             GenericEvent@ event = GenericEvent("MicrobeEditorRigidityUpdated");
-        //             NamedVars@ vars = event.GetNamedVars();
-        //             vars.AddValue(ScriptSafeVariableBlock("rigidity", editor.rigidity));
-        //             GetEngine().GetEventHandler().CallEvent(event);
-        //         },
-        //         // undo
-        //         function(EditorAction@ action, MicrobeEditor@ editor){
-        //             editor.rigidity = float(action.data["prevRigidity"]);
-        //             GenericEvent@ event = GenericEvent("MicrobeEditorRigidityUpdated");
-        //             NamedVars@ vars = event.GetNamedVars();
-        //             vars.AddValue(ScriptSafeVariableBlock("rigidity", editor.rigidity));
-        //             GetEngine().GetEventHandler().CallEvent(event);
-        //         }
-        //     );
-        //
-        //     action.data["rigidity"] = newRigidity;
-        //     action.data["prevRigidity"] = rigidity;
-        //
-        //     enqueueAction(action);
-        // }
+            var newRigidity = rigidity;
+            var prevRigidity = Rigidity;
+
+            var action = new EditorAction(this, cost,
+                redo =>
+                {
+                    Rigidity = newRigidity;
+                    gui.UpdateRigiditySlider(Rigidity, MutationPoints);
+                    gui.UpdateSpeed(CalculateSpeed());
+                },
+                undo =>
+                {
+                    Rigidity = prevRigidity;
+                    gui.UpdateRigiditySlider(Rigidity, MutationPoints);
+                    gui.UpdateSpeed(CalculateSpeed());
+                });
+
+            EnqueueAction(action);
+        }
     }
 
     /// <summary>
@@ -759,6 +741,7 @@ public class MicrobeEditor : Node
 
         gui.UpdatePlayerPatch(targetPatch);
         UpdatePatchBackgroundImage();
+        CalculateOrganelleEffectivenessInPatch(targetPatch);
     }
 
     /// <summary>
@@ -795,9 +778,8 @@ public class MicrobeEditor : Node
 
         organelleRot = 0;
 
-        // TODO: this might not get properly reset in the GUI part so
-        // GUI should also be notified about this
         Symmetry = 0;
+        gui.ResetSymmetryButton();
 
         UpdateUndoRedoButtons();
 
@@ -823,6 +805,8 @@ public class MicrobeEditor : Node
         // Sent freebuild value to GUI
         gui.NotifyFreebuild(FreeBuilding);
 
+        playerPatchOnEntry = CurrentGame.GameWorld.Map.CurrentPatch;
+
         // Send info to the GUI about the organelle effectiveness in the current patch
         CalculateOrganelleEffectivenessInPatch();
 
@@ -832,8 +816,6 @@ public class MicrobeEditor : Node
 
         canStillMove = true;
 
-        playerPatchOnEntry = CurrentGame.GameWorld.Map.CurrentPatch;
-
         UpdatePatchBackgroundImage();
 
         gui.SetMap(CurrentGame.GameWorld.Map);
@@ -841,6 +823,8 @@ public class MicrobeEditor : Node
         var playerSpecies = CurrentGame.GameWorld.PlayerSpecies;
 
         SetupEditedSpecies(playerSpecies as MicrobeSpecies);
+
+        gui.UpdateGlucoseReduction(Constants.GLUCOSE_REDUCTION_RATE);
     }
 
     private void SetupEditedSpecies(MicrobeSpecies species)
@@ -878,9 +862,8 @@ public class MicrobeEditor : Node
 
         NewName = species.FormattedName;
         Rigidity = species.MembraneRigidity;
-        Colour = species.Colour;
 
-        gui.SetSpeciesInfo(NewName, Membrane, Colour, Rigidity);
+        gui.SetSpeciesInfo(NewName, Membrane, species.Colour, Rigidity);
 
         species.Generation += 1;
         gui.UpdateGeneration(species.Generation);
@@ -893,7 +876,7 @@ public class MicrobeEditor : Node
         var random = new Random();
 
         var population = random.Next(Constants.INITIAL_SPLIT_POPULATION_MIN,
-            Constants.INITIAL_SPLIT_POPULATION_MAX);
+            Constants.INITIAL_SPLIT_POPULATION_MAX + 1);
 
         if (!CurrentGame.GameWorld.Map.CurrentPatch.AddSpecies(newSpecies, population))
         {
@@ -1413,6 +1396,8 @@ public class MicrobeEditor : Node
         CurrentGame.GameWorld.GetAutoEvoRun().ApplyExternalEffects();
 
         CurrentGame.GameWorld.Map.RemoveExtinctSpecies(FreeBuilding);
+
+        CurrentGame.GameWorld.Map.UpdateGlobalPopulations();
 
         // Clear the run to make the cell stage start a new run when we go back there
         CurrentGame.GameWorld.ResetAutoEvoRun();

@@ -11,13 +11,17 @@ public class GUICommon : Node
 
     private AudioStream buttonPressSound;
 
+    private Tween tween;
+
     private GUICommon()
     {
         instance = this;
 
         AudioSource = new AudioStreamPlayer();
+        tween = new Tween();
 
         AddChild(AudioSource);
+        AddChild(tween);
 
         // Keep this node running while paused
         PauseMode = PauseModeEnum.Process;
@@ -55,5 +59,33 @@ public class GUICommon : Node
     {
         AudioSource.Stream = sound;
         AudioSource.Play();
+    }
+
+    /// <summary>
+    ///   Smoothly interpolates TextureProgress bar value.
+    /// </summary>
+    public void TweenBarValue(TextureProgress bar, float targetValue, float maxValue)
+    {
+        var percentage = (targetValue / maxValue) * 100;
+        tween.InterpolateProperty(bar, "value", bar.Value, percentage, 0.3f,
+            Tween.TransitionType.Linear, Tween.EaseType.Out);
+        tween.Start();
+    }
+
+    /// <summary>
+    ///   Creates an icon for the given compound.
+    /// </summary>
+    public TextureRect CreateCompoundIcon(string compoundName, float sizeX = 20.0f, float sizeY = 20.0f)
+    {
+        var element = new TextureRect();
+        element.Expand = true;
+        element.RectMinSize = new Vector2(sizeX, sizeY);
+
+        var icon = GD.Load<Texture>("res://assets/textures/gui/bevel/" + compoundName.ReplaceN(
+            " ", string.Empty) + ".png");
+
+        element.Texture = icon;
+
+        return element;
     }
 }

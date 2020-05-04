@@ -50,7 +50,7 @@ public class Constants
 
     public const float FLAGELLA_ENERGY_COST = 7.1f;
 
-    public const float FLAGELLA_BASE_FORCE = 40.7f;
+    public const float FLAGELLA_BASE_FORCE = 75.7f;
 
     /// <summary>
     ///   Used for energy balance calculations
@@ -201,9 +201,9 @@ public class Constants
     public const float ENGULFED_MOVEMENT_DIVISION = 10.0f;
 
     /// <summary>
-    ///   The minimum HP ratio between a cell and a possible engulfing victim.
+    ///   The minimum size ratio between a cell and a possible engulfing victim.
     /// </summary>
-    public const float ENGULF_HP_RATIO_REQ = 1.5f;
+    public const float ENGULF_SIZE_RATIO_REQ = 1.5f;
 
     /// <summary>
     ///   The amount of hp per second of damage when being engulfed
@@ -211,9 +211,19 @@ public class Constants
     public const float ENGULF_DAMAGE = 45.0f;
 
     /// <summary>
+    ///   Damage a single pilus stab does
+    /// </summary>
+    public const float PILUS_BASE_DAMAGE = 5.0f;
+
+    /// <summary>
     ///   Osmoregulation ATP cost per second per hex
     /// </summary>
     public const float ATP_COST_FOR_OSMOREGULATION = 1.0f;
+
+    /// <summary>
+    ///   The default contact store count for objects using contact reporting
+    /// </summary>
+    public const int DEFAULT_STORE_CONTACTS_COUNT = 4;
 
     // Darwinian Evo Values
     public const int CREATURE_DEATH_POPULATION_LOSS = -60;
@@ -221,6 +231,9 @@ public class Constants
     public const int CREATURE_SCAVENGE_POPULATION_GAIN = 10;
     public const int CREATURE_REPRODUCE_POPULATION_GAIN = 50;
     public const int CREATURE_ESCAPE_POPULATION_GAIN = 50;
+
+    public const int PLAYER_DEATH_POPULATION_LOSS = -20;
+    public const int PLAYER_REPRODUCTION_POPULATION_GAIN = 50;
 
     /// <summary>
     ///   How often a microbe can get the engulf escape population bonus
@@ -310,6 +323,8 @@ public class Constants
     public const int AUTO_EVO_HIGH_SPECIES_THRESHOLD = 11;
     public const int AUTO_EVO_HIGH_SPECIES_PENALTY = 500;
     public const int AUTO_EVO_RANDOM_POPULATION_CHANGE = 500;
+
+    public const float GLUCOSE_REDUCTION_RATE = 0.8f;
 
     /// <summary>
     ///   All Nodes tagged with this are handled by the spawn system for despawning

@@ -59,7 +59,7 @@ public class GameWorld
                         var data = patch.Biome.Compounds[compound];
 
                         // TODO: verify that this change is picked up by the patch manager
-                        data.Density *= 0.8f;
+                        data.Density *= Constants.GLUCOSE_REDUCTION_RATE;
                     }
                 }
             }
@@ -121,7 +121,7 @@ public class GameWorld
             {
                 int population = Constants.INITIAL_SPECIES_POPULATION +
                     random.Next(Constants.INITIAL_FREEBUILD_POPULATION_VARIANCE_MIN,
-                        Constants.INITIAL_FREEBUILD_POPULATION_VARIANCE_MAX);
+                        Constants.INITIAL_FREEBUILD_POPULATION_VARIANCE_MAX + 1);
 
                 entry.Value.AddSpecies(mutator.CreateRandomSpecies(NewMicrobeSpecies()), population);
             }

@@ -1,8 +1,13 @@
-[gd_scene load_steps=118 format=2]
+[gd_scene load_steps=127 format=2]
 
 [ext_resource path="res://src/microbe_stage/MicrobeStage.cs" type="Script" id=1]
 [ext_resource path="res://src/microbe_stage/MicrobeCamera.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/textures/gui/bevel/AmmoniaInv.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/gui/bevel/PhosphateInv.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/gui/bevel/PhosphatesBW.png" type="Texture" id=5]
+[ext_resource path="res://assets/sounds/soundeffects/microbe-pickup-organelle.ogg" type="AudioStream" id=6]
 [ext_resource path="res://src/microbe_stage/PlayerMicrobeInput.cs" type="Script" id=7]
+[ext_resource path="res://scripts/gui/WinBox.tscn" type="PackedScene" id=8]
 [ext_resource path="res://src/microbe_stage/MicrobeHUD.cs" type="Script" id=9]
 [ext_resource path="res://src/microbe_stage/CompoundCloudSystem.cs" type="Script" id=10]
 [ext_resource path="res://assets/textures/gui/menu_theme.tres" type="Theme" id=11]
@@ -47,11 +52,11 @@
 [ext_resource path="res://assets/textures/gui/bevel/Phosphates.png" type="Texture" id=50]
 [ext_resource path="res://assets/textures/gui/bevel/Oxygen.png" type="Texture" id=51]
 [ext_resource path="res://assets/textures/gui/bevel/Pressure.png" type="Texture" id=52]
-[ext_resource path="res://assets/textures/gui/bevel/Light.png" type="Texture" id=53]
+[ext_resource path="res://assets/textures/gui/bevel/Sunlight.png" type="Texture" id=53]
 [ext_resource path="res://assets/textures/gui/bevel/Temperature.png" type="Texture" id=54]
-[ext_resource path="res://assets/textures/gui/bevel/CO2.png" type="Texture" id=55]
+[ext_resource path="res://assets/textures/gui/bevel/CarbonDioxide.png" type="Texture" id=55]
 [ext_resource path="res://assets/textures/gui/bevel/Nitrogen.png" type="Texture" id=56]
-[ext_resource path="res://assets/textures/gui/bevel/OxyToxy.png" type="Texture" id=57]
+[ext_resource path="res://assets/textures/gui/bevel/OxytoxyNT.png" type="Texture" id=57]
 [ext_resource path="res://assets/textures/gui/bevel/HealthBarFg.png" type="Texture" id=58]
 [ext_resource path="res://assets/textures/gui/bevel/AtpBarFg.png" type="Texture" id=59]
 [ext_resource path="res://assets/textures/gui/bevel/ATP.png" type="Texture" id=60]
@@ -64,6 +69,10 @@
 [ext_resource path="res://assets/textures/gui/bevel/CompoundPanelCompress.png" type="Texture" id=67]
 [ext_resource path="res://assets/textures/gui/bevel/environmentPanelCompress.png" type="Texture" id=68]
 [ext_resource path="res://assets/fonts/thrive.ttf" type="DynamicFontData" id=69]
+[ext_resource path="res://scripts/gui/ExtinctionBox.tscn" type="PackedScene" id=70]
+[ext_resource path="res://assets/textures/gui/bevel/AmmoniaBW.png" type="Texture" id=71]
+[ext_resource path="res://src/general/HelpScreen.tscn" type="PackedScene" id=72]
+[ext_resource path="res://scripts/gui/HelpBox.tscn" type="PackedScene" id=73]
 [ext_resource path="res://assets/textures/gui/bevel/pauseButtonPausedHover.png" type="Texture" id=78]
 [ext_resource path="res://assets/textures/gui/bevel/pauseButtonPaused.png" type="Texture" id=79]
 
@@ -250,7 +259,6 @@ size = 14
 font_data = ExtResource( 69 )
 
 [sub_resource type="Animation" id=45]
-resource_name = "EditorButtonFlash"
 length = 5.0
 loop = true
 tracks/0/type = "value"
@@ -719,6 +727,42 @@ tracks/4/keys = {
 "update": 0,
 "values": [ 0.0, -1.0 ]
 }
+tracks/5/type = "value"
+tracks/5/path = NodePath("LeftPanels/EnvironmentPanel:mouse_filter")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("LeftPanels/CompoundsPanel:mouse_filter")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("LeftPanels/AgentsPanel:mouse_filter")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 2 ]
+}
 
 [sub_resource type="Animation" id=51]
 tracks/0/type = "value"
@@ -781,6 +825,42 @@ tracks/4/keys = {
 "update": 0,
 "values": [ -2.0, 0.0 ]
 }
+tracks/5/type = "value"
+tracks/5/path = NodePath("LeftPanels/EnvironmentPanel:mouse_filter")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 0 ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("LeftPanels/CompoundsPanel:mouse_filter")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 0 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("LeftPanels/AgentsPanel:mouse_filter")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 0 ]
+}
 
 [node name="MicrobeStage" type="Node"]
 script = ExtResource( 1 )
@@ -804,6 +884,25 @@ script = ExtResource( 9 )
 __meta__ = {
 "_editor_description_": ""
 }
+AnimationPlayerPath = NodePath("AnimationPlayer")
+MouseHoverPanelPath = NodePath("MouseHoverPanel")
+HoveredItemsContainerPath = NodePath("MouseHoverPanel/MarginContainer/VBoxContainer/HoveredItems")
+MenuPath = NodePath("CanvasLayer/PauseMenu")
+PauseButtonPath = NodePath("BottomBar/PauseButtonMargin/Pause")
+ResumeButtonPath = NodePath("BottomBar/PauseButtonMargin/Resume")
+AtpLabelPath = NodePath("BottomRight/DataValue/Margin/VBox/ATPValue")
+HpLabelPath = NodePath("BottomRight/DataValue/Margin/VBox/HPValue")
+PopulationLabelPath = NodePath("BottomRight/PopulationData/Value")
+PatchLabelPath = NodePath("BottomBar/PatchLabel")
+EditorButtonPath = NodePath("BottomRight/EditorButton")
+HelpScreenPath = NodePath("CanvasLayer/HelpScreen")
+ExtinctionBoxScene = ExtResource( 70 )
+WinBoxScene = ExtResource( 8 )
+MicrobePickupOrganelleSound = ExtResource( 6 )
+AmmoniaBW = ExtResource( 71 )
+PhosphatesBW = ExtResource( 5 )
+AmmoniaInv = ExtResource( 3 )
+PhosphatesInv = ExtResource( 4 )
 
 [node name="MouseHoverPanel" type="PanelContainer" parent="MicrobeHUD"]
 anchor_left = 1.0
@@ -812,6 +911,7 @@ margin_left = -280.0
 margin_top = 10.0
 margin_right = -10.0
 margin_bottom = 140.0
+grow_horizontal = 0
 theme = SubResource( 2 )
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -2534,6 +2634,7 @@ margin_left = 139.0
 margin_right = 181.0
 margin_bottom = 43.0
 focus_mode = 0
+disabled = true
 enabled_focus_mode = 0
 texture_normal = ExtResource( 21 )
 texture_pressed = ExtResource( 30 )
@@ -2544,6 +2645,7 @@ margin_left = 185.0
 margin_right = 227.0
 margin_bottom = 43.0
 focus_mode = 0
+disabled = true
 enabled_focus_mode = 0
 texture_normal = ExtResource( 20 )
 texture_pressed = ExtResource( 29 )
@@ -2554,6 +2656,7 @@ margin_left = 231.0
 margin_right = 273.0
 margin_bottom = 43.0
 focus_mode = 0
+disabled = true
 enabled_focus_mode = 0
 texture_normal = ExtResource( 17 )
 texture_pressed = ExtResource( 32 )
@@ -2564,6 +2667,7 @@ margin_left = 277.0
 margin_right = 319.0
 margin_bottom = 43.0
 focus_mode = 0
+disabled = true
 enabled_focus_mode = 0
 texture_normal = ExtResource( 16 )
 texture_pressed = ExtResource( 37 )
@@ -2694,7 +2798,7 @@ margin_left = -101.282
 margin_top = -75.282
 margin_right = 158.718
 margin_bottom = 176.718
-step = 0.1
+step = 0.001
 value = 100.0
 texture_under = ExtResource( 63 )
 texture_progress = ExtResource( 59 )
@@ -2824,18 +2928,12 @@ __meta__ = {
 [node name="AmmoniaReproductionBar" type="TextureProgress" parent="MicrobeHUD/BottomRight/EditorButton/ReproductionBar" groups=[
 "MicrobeTextureHUDBar",
 ]]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -97.5
-margin_top = -97.5
-margin_right = 97.5
-margin_bottom = 97.5
+margin_right = 195.0
+margin_bottom = 195.0
 step = 0.1
 texture_progress = ExtResource( 65 )
 fill_mode = 5
-tint_progress = Color( 0.85098, 0.772549, 0.364706, 1 )
+tint_progress = Color( 1, 0.627451, 0.121569, 1 )
 radial_fill_degrees = 180.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -2844,19 +2942,36 @@ __meta__ = {
 [node name="PhosphateReproductionBar" type="TextureProgress" parent="MicrobeHUD/BottomRight/EditorButton/ReproductionBar" groups=[
 "MicrobeTextureHUDBar",
 ]]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -97.5
-margin_top = -97.5
-margin_right = 97.5
-margin_bottom = 97.5
+margin_right = 195.0
+margin_bottom = 195.0
 step = 0.1
 texture_progress = ExtResource( 65 )
-fill_mode = 4
-tint_progress = Color( 0.231373, 0.0862745, 0.482353, 1 )
+fill_mode = 5
+tint_progress = Color( 0.690196, 0.423529, 1, 1 )
+radial_initial_angle = 180.0
 radial_fill_degrees = 180.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AmmoniaIcon" type="TextureRect" parent="MicrobeHUD/BottomRight/EditorButton/ReproductionBar"]
+margin_left = 85.0
+margin_top = 7.5
+margin_right = 110.0
+margin_bottom = 32.5
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PhosphateIcon" type="TextureRect" parent="MicrobeHUD/BottomRight/EditorButton/ReproductionBar"]
+margin_left = 85.0
+margin_top = 162.5
+margin_right = 110.0
+margin_bottom = 187.5
+texture = ExtResource( 4 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -2939,7 +3054,6 @@ margin_top = 200.0
 margin_right = 250.0
 margin_bottom = 240.0
 rect_min_size = Vector2( 250, 40 )
-disabled = true
 text = "Help"
 
 [node name="Options" type="Button" parent="MicrobeHUD/CanvasLayer/PauseMenu/CenterContainer/MicrobeStageMenu"]
@@ -2965,6 +3079,155 @@ margin_bottom = 390.0
 rect_min_size = Vector2( 250, 40 )
 text = "Exit"
 
+[node name="HelpScreen" parent="MicrobeHUD/CanvasLayer" instance=ExtResource( 72 )]
+
+[node name="HBoxContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer" index="0"]
+margin_bottom = 90.0
+
+[node name="LeftColumn" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer" index="0"]
+margin_bottom = 614.0
+
+[node name="HelpBox" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="0" instance=ExtResource( 73 )]
+margin_bottom = 64.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox" index="0"]
+margin_bottom = 64.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox/MarginContainer" index="0"]
+margin_bottom = 59.0
+text = "W,A,S,D and mouse to move. E to shoot OxyToxy NT if you have a toxin vacuole. G to toggle engulf mode."
+
+[node name="HelpBox2" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="1" instance=ExtResource( 73 )]
+margin_top = 79.0
+margin_bottom = 124.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox2" index="0"]
+margin_bottom = 45.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox2/MarginContainer" index="0"]
+margin_bottom = 40.0
+text = "Your cell uses ATP as it's energy source, if it runs out you will die."
+
+[node name="HelpBox3" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="2" instance=ExtResource( 73 )]
+margin_top = 139.0
+margin_bottom = 203.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox3" index="0"]
+margin_bottom = 64.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox3/MarginContainer" index="0"]
+margin_bottom = 59.0
+text = "To unlock the editor and reproduce you need to gather Ammonia (Orange Cloud) and Phosphate (Purple Cloud)."
+
+[node name="HelpBox4" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="3" instance=ExtResource( 73 )]
+margin_top = 218.0
+margin_bottom = 320.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox4" index="0"]
+margin_bottom = 102.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox4/MarginContainer" index="0"]
+margin_bottom = 97.0
+text = "You can also engulf cells and bacteria and iron chunks and cell chunks that are smaller than you by pressing G. This will cost additional ATP and will slow you down. Don't forget to press G a second time to stop engulfing."
+
+[node name="HelpBox5" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="4" instance=ExtResource( 73 )]
+margin_top = 335.0
+margin_bottom = 475.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox5" index="0"]
+margin_bottom = 140.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox5/MarginContainer" index="0"]
+margin_bottom = 135.0
+text = "Osmoregulation Now costs ATP, which means the bigger your cell is, the more Mitochondria or Metabolosomes or Rusticyanin (or cytoplasm, which does Glycolysis) you need to avoid losing ATP when you are stationary. It works this way: Osmoregulation costs are ((Hex Amount * 1) per second..."
+
+[node name="HelpBox6" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="5" instance=ExtResource( 73 )]
+margin_top = 490.0
+margin_bottom = 554.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox6" index="0"]
+margin_bottom = 64.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox6/MarginContainer" index="0"]
+margin_bottom = 59.0
+text = "There are many Organelles in the editor for you to evolve, allowing for a wide range of different playstyles."
+
+[node name="HelpBox7" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn" index="6" instance=ExtResource( 73 )]
+margin_top = 569.0
+margin_bottom = 614.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox7" index="0"]
+margin_bottom = 45.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox7/MarginContainer" index="0"]
+margin_bottom = 40.0
+text = "For this Release if your population (top tab) drops to zero you go extinct."
+
+[node name="RightColumn" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer" index="1"]
+margin_bottom = 614.0
+
+[node name="HelpBox" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn" index="0" instance=ExtResource( 73 )]
+margin_bottom = 178.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox" index="0"]
+margin_bottom = 178.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox/MarginContainer" index="0"]
+margin_bottom = 173.0
+text = "The various compound clouds are:
+
+White – Glucose 
+Yellow – Hydrogen Sulfide
+Orange - Ammonia 
+Purple - Phosphate 
+Rust Brown - Iron 
+
+Glucose makes ATP"
+
+[node name="HelpBox2" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn" index="1" instance=ExtResource( 73 )]
+margin_top = 193.0
+margin_bottom = 276.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox2" index="0"]
+margin_bottom = 83.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox2/MarginContainer" index="0"]
+margin_bottom = 78.0
+text = "Hydrogen Sulfide can be converted into glucose via chemoplasts and chemosynthesizing proteins Iron can be converted via rusticyanin into ATP."
+
+[node name="HelpBox3" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn" index="2" instance=ExtResource( 73 )]
+margin_top = 291.0
+margin_bottom = 374.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox3" index="0"]
+margin_bottom = 83.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox3/MarginContainer" index="0"]
+margin_bottom = 78.0
+text = "To reproduce you need to divide each of your organelles into two and then duplicate the DNA in your nucleus. Each organelle needs 2 ammonia and 2 phosphate to split in half."
+
+[node name="HelpBox4" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn" index="3" instance=ExtResource( 73 )]
+margin_top = 389.0
+margin_bottom = 472.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox4" index="0"]
+margin_bottom = 83.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox4/MarginContainer" index="0"]
+margin_bottom = 78.0
+text = "But if you survive for twenty generations with 300 population, you are considered to have won, after winning you get a popup and can continue playing as you wish."
+
+[node name="HelpBox5" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn" index="4" instance=ExtResource( 73 )]
+margin_top = 487.0
+margin_bottom = 551.0
+
+[node name="MarginContainer" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox5" index="0"]
+margin_bottom = 64.0
+
+[node name="Label" parent="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox5/MarginContainer" index="0"]
+margin_bottom = 59.0
+text = "Be wary because your competitors are evolving alongside you. Every time you enter the editor they evolve as well."
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="MicrobeHUD"]
 anims/CompoundPanelCompress = SubResource( 46 )
 anims/CompoundPanelExpand = SubResource( 47 )
@@ -2983,4 +3246,32 @@ anims/ShowLeftPanels = SubResource( 51 )
 [connection signal="pressed" from="MicrobeHUD/BottomBar/SuicideButton" to="MicrobeHUD" method="OnSuicide"]
 [connection signal="pressed" from="MicrobeHUD/BottomRight/EditorButton" to="MicrobeHUD" method="EditorButtonPressed"]
 [connection signal="pressed" from="MicrobeHUD/CanvasLayer/PauseMenu/CenterContainer/MicrobeStageMenu/Resume" to="MicrobeHUD" method="OpenMicrobeStageMenuPressed"]
+[connection signal="pressed" from="MicrobeHUD/CanvasLayer/PauseMenu/CenterContainer/MicrobeStageMenu/Help" to="MicrobeHUD" method="ToggleHelpScreen"]
 [connection signal="pressed" from="MicrobeHUD/CanvasLayer/PauseMenu/CenterContainer/MicrobeStageMenu/Exit" to="MicrobeHUD" method="ExitPressed"]
+[connection signal="pressed" from="MicrobeHUD/CanvasLayer/HelpScreen/CloseButton" to="MicrobeHUD" method="ToggleHelpScreen"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox2"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox3"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox4"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox5"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox6"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/LeftColumn/HelpBox7"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox2"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox3"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox4"]
+
+[editable path="MicrobeHUD/CanvasLayer/HelpScreen/ScrollContainer/HBoxContainer/RightColumn/HelpBox5"]
