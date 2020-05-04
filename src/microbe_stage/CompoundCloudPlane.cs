@@ -124,7 +124,8 @@ public class CompoundCloudPlane : CSGMesh
         // The diffusion rate seems to have a bigger effect
         delta *= 100.0f;
         var pos = new Vector2(Translation.x, Translation.z);
-        foreach (var slot in slots) slot.Update(delta, pos);
+        foreach (var slot in slots)
+            slot.Update(delta, pos);
     }
 
     /// <summary>
@@ -134,32 +135,32 @@ public class CompoundCloudPlane : CSGMesh
     public void UpdateEdgesBeforeCenter(float delta)
     {
         delta *= 100.0f;
-    
-        foreach(var slot in slots)
+
+        foreach (var slot in slots)
         {
             // The top edge.
-            for(int x = 0; x < Size; x++)
+            for (int x = 0; x < Size; x++)
             {
                 int y = 0;
                 slot.DiffuseTile(x, y, delta);
             }
-            
+
             // The bottom edge.
-            for(int x = 0; x < Size; x++)
+            for (int x = 0; x < Size; x++)
             {
                 int y = Size - 1;
                 slot.DiffuseTile(x, y, delta);
             }
-            
+
             // The left edge.
-            for(int y = 1; y < Size - 1; y++)
+            for (int y = 1; y < Size - 1; y++)
             {
                 int x = 0;
                 slot.DiffuseTile(x, y, delta);
             }
-            
+
             // The right edge.
-            for(int y = 1; y < Size - 1; y++)
+            for (int y = 1; y < Size - 1; y++)
             {
                 int x = Size - 1;
                 slot.DiffuseTile(x, y, delta);
@@ -175,32 +176,32 @@ public class CompoundCloudPlane : CSGMesh
     {
         delta *= 100.0f;
         var pos = new Vector2(Translation.x, Translation.z);
-    
-        foreach(var slot in slots)
+
+        foreach (var slot in slots)
         {
             // The top edge.
-            for(int x = 0; x < Size; x++)
+            for (int x = 0; x < Size; x++)
             {
                 int y = 0;
                 slot.AdvectTile(x, y, delta, pos);
             }
-            
+
             // The bottom edge.
-            for(int x = 0; x < Size; x++)
+            for (int x = 0; x < Size; x++)
             {
                 int y = Size - 1;
                 slot.AdvectTile(x, y, delta, pos);
             }
-            
+
             // The left edge.
-            for(int y = 1; y < Size - 1; y++)
+            for (int y = 1; y < Size - 1; y++)
             {
                 int x = 0;
                 slot.AdvectTile(x, y, delta, pos);
             }
-            
+
             // The right edge.
-            for(int y = 1; y < Size - 1; y++)
+            for (int y = 1; y < Size - 1; y++)
             {
                 int x = Size - 1;
                 slot.AdvectTile(x, y, delta, pos);
@@ -402,7 +403,8 @@ public class CompoundCloudPlane : CSGMesh
 
     public void ClearContents()
     {
-        foreach (var slot in slots) slot.Clear();
+        foreach (var slot in slots)
+            slot.Clear();
     }
 
     private Slot GetSlot(Compound compound)
@@ -427,6 +429,40 @@ public class CompoundCloudPlane : CSGMesh
         throw new ArgumentException("compound not handled by this cloud", nameof(compound));
     }
 
+    private void AddCloudDensity(int slotIndex, int x, int y, float value)
+    {
+        var xComponent = this;
+        if (x < 0)
+        {
+            xComponent = LeftCloud;
+        }
+        else if (x >= Size)
+        {
+            xComponent = RightCloud;
+        }
+
+        if (xComponent == null)
+            return;
+
+        var yComponent = xComponent;
+        if (y < 0)
+        {
+            yComponent = xComponent.UpperCloud;
+        }
+        else if (y >= Size)
+        {
+            yComponent = xComponent.LowerCloud;
+        }
+
+        if (yComponent == null)
+            return;
+
+        x = (x + Size) % Size;
+        y = (y + Size) % Size;
+
+        yComponent.slots[slotIndex].Density[x, y] += value;
+    }
+
     private class Slot
     {
         public float[,] Density;
@@ -438,7 +474,8 @@ public class CompoundCloudPlane : CSGMesh
         private readonly CompoundCloudPlane parentPlane;
         private readonly int index;
 
-        public Slot(Compound compound, int size, int resolution, FluidSystem fluidSystem, CompoundCloudPlane parent, int index)
+        public Slot(Compound compound, int size, int resolution,
+            FluidSystem fluidSystem, CompoundCloudPlane parent, int index)
         {
             this.size = size;
             this.resolution = resolution;
@@ -497,50 +534,55 @@ public class CompoundCloudPlane : CSGMesh
             float a = delta * Constants.CLOUD_DIFFUSION_RATE;
 
             float upperDensity = 0.0f;
-            if(y > 0)
+            if (y > 0)
+            {
                 upperDensity = Density[x, y - 1];
-            else if(parentPlane.UpperCloud != null)
+            }
+            else if (parentPlane.UpperCloud != null)
+            {
                 upperDensity = parentPlane.UpperCloud.slots[index]
                                 .Density[x, size - 1];
+            }
 
             float lowerDensity = 0.0f;
-            if(y < size - 1)
+            if (y < size - 1)
+            {
                 lowerDensity = Density[x, y + 1];
-            else if(parentPlane.LowerCloud != null)
+            }
+            else if (parentPlane.LowerCloud != null)
+            {
                 lowerDensity =
                     parentPlane.LowerCloud.slots[index]
                                 .Density[x, 0];
+            }
 
             float leftDensity = 0.0f;
-            if(x > 0)
+            if (x > 0)
+            {
                 leftDensity = Density[x - 1, y];
-            else if(parentPlane.LeftCloud != null)
+            }
+            else if (parentPlane.LeftCloud != null)
+            {
                 leftDensity = parentPlane.LeftCloud.slots[index]
                                 .Density[size - 1, y];
+            }
 
             float rightDensity = 0.0f;
-            if(x < size - 1)
+            if (x < size - 1)
+            {
                 rightDensity = Density[x + 1, y];
-            else if(parentPlane.RightCloud != null)
+            }
+            else if (parentPlane.RightCloud != null)
+            {
                 rightDensity =
                     parentPlane.RightCloud.slots[index]
                                 .Density[0, y];
+            }
 
             OldDensity[x, y] =
                 Density[x, y] * (1 - a) +
                 (upperDensity + lowerDensity + leftDensity + rightDensity) * a /
                     4;
-        }
-
-        private void Diffuse(float delta)
-        {
-            for (int x = 1; x < size - 1; x++)
-            {
-                for (int y = 1; y < size - 1; y++)
-                {
-                    DiffuseTile(x, y, delta);
-                }
-            }
         }
 
         public void AdvectTile(int x, int y, float delta, Vector2 pos)
@@ -557,9 +599,9 @@ public class CompoundCloudPlane : CSGMesh
                 float dx = x + delta * velocity.x;
                 float dy = y + delta * velocity.x;
 
-                int x0 = (int)(Math.Floor(dx));
+                int x0 = (int)Math.Floor(dx);
                 int x1 = x0 + 1;
-                int y0 = (int)(Math.Floor(dy));
+                int y0 = (int)Math.Floor(dy);
                 int y1 = y0 + 1;
 
                 float s1 = Math.Abs(dx - x0);
@@ -567,13 +609,13 @@ public class CompoundCloudPlane : CSGMesh
                 float t1 = Math.Abs(dy - y0);
                 float t0 = 1.0f - t1;
 
-                parentPlane.addCloudDensity(index, x0, y0,
+                parentPlane.AddCloudDensity(index, x0, y0,
                     OldDensity[x, y] * s0 * t0);
-                parentPlane.addCloudDensity(index, x0, y1,
+                parentPlane.AddCloudDensity(index, x0, y1,
                     OldDensity[x, y] * s0 * t1);
-                parentPlane.addCloudDensity(index, x1, y0,
+                parentPlane.AddCloudDensity(index, x1, y0,
                     OldDensity[x, y] * s1 * t0);
-                parentPlane.addCloudDensity(index, x1, y1,
+                parentPlane.AddCloudDensity(index, x1, y1,
                     OldDensity[x, y] * s1 * t1);
             }
         }
@@ -589,6 +631,17 @@ public class CompoundCloudPlane : CSGMesh
             }
         }
 
+        private void Diffuse(float delta)
+        {
+            for (int x = 1; x < size - 1; x++)
+            {
+                for (int y = 1; y < size - 1; y++)
+                {
+                    DiffuseTile(x, y, delta);
+                }
+            }
+        }
+
         private void Advect(float delta, Vector2 pos)
         {
             for (int x = 1; x < size - 1; x++)
@@ -599,33 +652,5 @@ public class CompoundCloudPlane : CSGMesh
                 }
             }
         }
-    }
-
-    void addCloudDensity(int slotIndex, int x, int y, float value)
-    {
-        var xComponent = this;
-        if(x < 0) {
-            xComponent = LeftCloud;
-        } else if(x >= Size) {
-            xComponent = RightCloud;
-        }
-
-        if(xComponent == null)
-            return;
-
-        var yComponent = xComponent;
-        if(y < 0) {
-            yComponent = xComponent.UpperCloud;
-        } else if(y >= Size) {
-            yComponent = xComponent.LowerCloud;
-        }
-
-        if(yComponent == null)
-            return;
-
-        x = (x + Size) % Size;
-        y = (y + Size) % Size;
-
-        yComponent.slots[slotIndex].Density[x, y] += value;
     }
 }

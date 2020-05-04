@@ -172,28 +172,6 @@ public class CompoundCloudSystem : Node
         }
     }
 
-    private void SetUpCloudLinks(
-        Dictionary<Tuple<Int2, Compound>, CompoundCloudPlane> clouds)
-    {
-        var indices = clouds.Keys;
-        foreach(var index in indices) {
-            var cloudComponent = clouds[index];
-            var tile = index.Item1;
-            var groupId = index.Item2;
-
-            cloudComponent.UpperCloud =
-                tile.y == -1 ? null : clouds[Tuple.Create(tile + new Int2(0, -1), groupId)];
-            cloudComponent.LowerCloud =
-                tile.y == 1  ? null : clouds[Tuple.Create(tile + new Int2(0, 1),  groupId)];
-            cloudComponent.LeftCloud =
-                tile.x == -1 ? null : clouds[Tuple.Create(tile + new Int2(-1, 0), groupId)];
-            cloudComponent.RightCloud =
-                tile.x == 1  ? null : clouds[Tuple.Create(tile + new Int2(1, 0),  groupId)];
-        }
-    }
-
-
-
     /// <summary>
     ///   Resets the cloud contents and positions as well as the compound types they store
     /// </summary>
@@ -493,13 +471,15 @@ public class CompoundCloudSystem : Node
             Tuple.Create(new Int2(0, 0), center),
 
             // Top left
-            Tuple.Create(new Int2(-1, -1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2)),
+            Tuple.Create(new Int2(-1, -1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0,
+                                                                -Constants.CLOUD_HEIGHT * 2)),
 
             // Up
             Tuple.Create(new Int2(0, -1), center + new Vector3(0, 0, -Constants.CLOUD_HEIGHT * 2)),
 
             // Top right
-            Tuple.Create(new Int2(1, -1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, -Constants.CLOUD_HEIGHT * 2)),
+            Tuple.Create(new Int2(1, -1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0,
+                                                                -Constants.CLOUD_HEIGHT * 2)),
 
             // Left
             Tuple.Create(new Int2(-1, 0), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, 0)),
@@ -508,13 +488,15 @@ public class CompoundCloudSystem : Node
             Tuple.Create(new Int2(1, 0), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, 0)),
 
             // Bottom left
-            Tuple.Create(new Int2(-1, 1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2)),
+            Tuple.Create(new Int2(-1, 1), center + new Vector3(-Constants.CLOUD_WIDTH * 2, 0,
+                                                                Constants.CLOUD_HEIGHT * 2)),
 
             // Down
             Tuple.Create(new Int2(0, 1), center + new Vector3(0, 0, Constants.CLOUD_HEIGHT * 2)),
 
             // Bottom right
-            Tuple.Create(new Int2(1, 1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0, Constants.CLOUD_HEIGHT * 2)),
+            Tuple.Create(new Int2(1, 1), center + new Vector3(Constants.CLOUD_WIDTH * 2, 0,
+                                                                Constants.CLOUD_HEIGHT * 2)),
         };
     }
 
@@ -527,6 +509,27 @@ public class CompoundCloudSystem : Node
             (int)Math.Round(pos.x / Constants.CLOUD_X_EXTENT) * Constants.CLOUD_X_EXTENT,
             0,
             (int)Math.Round(pos.z / Constants.CLOUD_Y_EXTENT) * Constants.CLOUD_Y_EXTENT);
+    }
+
+    private void SetUpCloudLinks(
+        Dictionary<Tuple<Int2, Compound>, CompoundCloudPlane> clouds)
+    {
+        var indices = clouds.Keys;
+        foreach (var index in indices)
+        {
+            var cloudComponent = clouds[index];
+            var tile = index.Item1;
+            var groupId = index.Item2;
+
+            cloudComponent.UpperCloud =
+                tile.y == -1 ? null : clouds[Tuple.Create(tile + new Int2(0, -1), groupId)];
+            cloudComponent.LowerCloud =
+                tile.y == 1 ? null : clouds[Tuple.Create(tile + new Int2(0, 1), groupId)];
+            cloudComponent.LeftCloud =
+                tile.x == -1 ? null : clouds[Tuple.Create(tile + new Int2(-1, 0), groupId)];
+            cloudComponent.RightCloud =
+                tile.x == 1 ? null : clouds[Tuple.Create(tile + new Int2(1, 0), groupId)];
+        }
     }
 
     /// <summary>
