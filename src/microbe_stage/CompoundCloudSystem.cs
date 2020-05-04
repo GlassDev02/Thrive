@@ -175,9 +175,9 @@ public class CompoundCloudSystem : Node
     private void SetUpCloudLinks(
         Dictionary<Tuple<Int2, Compound>, CompoundCloudPlane> clouds)
     {
-        foreach(var kvp in clouds) {
-            var index = kvp.Key;
-            var cloudComponent = kvp.Value;
+        var indices = clouds.Keys;
+        foreach(var index in indices) {
+            var cloudComponent = clouds[index];
             var tile = index.Item1;
             var groupId = index.Item2;
 
@@ -269,6 +269,8 @@ public class CompoundCloudSystem : Node
                 ++positionIndex;
             }
         }
+
+        PositionClouds();
     }
 
     /// <summary>

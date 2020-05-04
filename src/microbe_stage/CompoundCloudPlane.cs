@@ -134,7 +134,6 @@ public class CompoundCloudPlane : CSGMesh
     public void UpdateEdgesBeforeCenter(float delta)
     {
         delta *= 100.0f;
-        var pos = new Vector2(Translation.x, Translation.z);
     
         foreach(var slot in slots)
         {
@@ -546,7 +545,6 @@ public class CompoundCloudPlane : CSGMesh
 
         public void AdvectTile(int x, int y, float delta, Vector2 pos)
         {
-            
             if (OldDensity[x, y] > 1)
             {
                 // TODO: give each cloud a viscosity value in the
@@ -556,20 +554,17 @@ public class CompoundCloudPlane : CSGMesh
                 var velocity = fluidSystem.VelocityAt(
                     pos + (new Vector2(x, y) * resolution)) * viscosity;
 
-                float dx = x + (delta * velocity.x);
-                float dy = y + (delta * velocity.y);
+                float dx = x + delta * velocity.x;
+                float dy = y + delta * velocity.x;
 
-                dx = dx.Clamp(0.5f, size - 1.5f);
-                dy = dy.Clamp(0.5f, size - 1.5f);
-
-                int x0 = (int)dx;
+                int x0 = (int)(Math.Floor(dx));
                 int x1 = x0 + 1;
-                int y0 = (int)dy;
+                int y0 = (int)(Math.Floor(dy));
                 int y1 = y0 + 1;
 
-                float s1 = dx - x0;
+                float s1 = Math.Abs(dx - x0);
                 float s0 = 1.0f - s1;
-                float t1 = dy - y0;
+                float t1 = Math.Abs(dy - y0);
                 float t0 = 1.0f - t1;
 
                 parentPlane.addCloudDensity(index, x0, y0,
@@ -618,9 +613,6 @@ public class CompoundCloudPlane : CSGMesh
         if(xComponent == null)
             return;
 
-        x = (x + Size) % Size;
-
-
         var yComponent = xComponent;
         if(y < 0) {
             yComponent = xComponent.UpperCloud;
@@ -631,9 +623,9 @@ public class CompoundCloudPlane : CSGMesh
         if(yComponent == null)
             return;
 
+        x = (x + Size) % Size;
         y = (y + Size) % Size;
 
         yComponent.slots[slotIndex].Density[x, y] += value;
     }
-
 }
