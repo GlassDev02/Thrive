@@ -173,7 +173,7 @@ public class CompoundCloudSystem : Node
     }
 
     private void SetUpCloudLinks(
-        Dictionary<Tuple<Int2, string>, CompoundCloudPlane> clouds)
+        Dictionary<Tuple<Int2, Compound>, CompoundCloudPlane> clouds)
     {
         foreach(var kvp in clouds) {
             var index = kvp.Key;
@@ -533,7 +533,7 @@ public class CompoundCloudSystem : Node
     private void PositionClouds()
     {
         var positions = CalculateGridPositions(cloudGridCenter);
-
+        var cloudsToLink = new Dictionary<Tuple<Int2, Compound>, CompoundCloudPlane>();
         tooFarAwayClouds.Clear();
 
         // All clouds that aren't at one of the requiredCloudPositions needs to
@@ -585,6 +585,8 @@ public class CompoundCloudSystem : Node
                         // Check that the group of the cloud is correct
                         if (groupType == cloud.Compound1)
                         {
+                            cloudsToLink.Add(Tuple.Create(requiredPos.Item1, cloud.Compound1),
+                                    cloud);
                             hasCloud = true;
                             break;
                         }
@@ -610,6 +612,10 @@ public class CompoundCloudSystem : Node
                         tooFarAwayClouds[checkReposition].RecycleToPosition(
                             requiredPos.Item2);
 
+                        cloudsToLink.Add(Tuple.Create(
+                                requiredPos.Item1, tooFarAwayClouds[checkReposition].Compound1),
+                            tooFarAwayClouds[checkReposition]);
+
                         // Set to null to skip on next scan
                         tooFarAwayClouds[checkReposition] = null;
 
@@ -626,6 +632,8 @@ public class CompoundCloudSystem : Node
                 }
             }
         }
+
+        SetUpCloudLinks(cloudsToLink);
     }
 
     private void UpdateCloudContents(float delta)
@@ -640,13 +648,19 @@ public class CompoundCloudSystem : Node
             tasks.Add(task);
         }
 
+        // Do moving compounds on the edges of the clouds serially
+        foreach (var cloud in clouds)
+        {
+            cloud.UpdateEdgesBeforeCenter(delta);
+        }
+
         // Start and wait for tasks to finish
         executor.RunTasks(tasks);
 
         // Do moving compounds on the edges of the clouds serially
         foreach (var cloud in clouds)
         {
-            cloud.UpdateEdges(delta);
+            cloud.UpdateEdgesAfterCenter(delta);
         }
 
         tasks.Clear();
