@@ -56,10 +56,6 @@ public class ProcessSystem
 
         int hexCount = 0;
 
-        
-        /// NEW: Created a new debuff variable for the number of cytoplasm hexes
-        float hexCountEnergyDebuff = 0;
-
         var atp = SimulationParameters.Instance.GetCompound("atp");
 
         foreach (var organelle in organelles)
@@ -103,14 +99,10 @@ public class ProcessSystem
 
             // Store hex count
             hexCount += organelle.HexCount;
-
-            
-            ///NEW: Recalcuates the hex count energy debuff by a specific factor
-            hexCountEnergyDebuff = (float)(hexCount * 1.5f);
         }
 
         // Add movement consumption together
-        result.BaseMovement = Constants.BASE_MOVEMENT_ATP_COST * hexCountEnergyDebuff;
+        result.BaseMovement = Constants.BASE_MOVEMENT_ATP_COST * hexCount;
         var totalMovementConsumption =
             movementATPConsumption + result.BaseMovement;
 
